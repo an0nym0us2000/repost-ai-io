@@ -11,10 +11,11 @@ import { verifyCronSecret } from '@/lib/middleware/auth';
 import { formatErrorResponse } from '@/lib/errors';
 import { publishToLinkedIn } from '@/lib/linkedin';
 import { PostStatus } from '@prisma/client';
+import { updateExpiredScheduledPosts } from '@/lib/posts/updateScheduledPosts';
 import logger from '@/lib/logger';
 
 /**
- * POST /api/cron/publish - Auto-publish scheduled posts
+ * POST /api/cron/publish - Auto-publish scheduled posts and update expired ones
  */
 export async function POST(req: NextRequest) {
   try {
@@ -22,6 +23,10 @@ export async function POST(req: NextRequest) {
     verifyCronSecret(req);
 
     const now = new Date();
+
+    // First, update any expired scheduled posts that don't need LinkedIn publishing
+    const expiredUpdated = await updateExpiredScheduledPosts();
+    logger.info('Updated expired scheduled posts', { count: expiredUpdated });
 
     // Find posts scheduled for publishing
     const scheduledPosts = await prisma.post.findMany({
@@ -52,6 +57,7 @@ export async function POST(req: NextRequest) {
     });
 
     const results = {
+      expiredUpdated,
       total: scheduledPosts.length,
       published: 0,
       failed: 0,
