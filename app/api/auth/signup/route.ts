@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { ValidationError, formatErrorResponse } from '@/lib/errors';
 import logger from '@/lib/logger';
@@ -37,9 +38,11 @@ export async function POST(req: NextRequest) {
     // Create user
     const user = await prisma.user.create({
       data: {
+        id: nanoid(),
         email: validatedData.email,
         password: hashedPassword,
         name: validatedData.name,
+        updatedAt: new Date(),
       },
       select: {
         id: true,
@@ -52,13 +55,16 @@ export async function POST(req: NextRequest) {
     // Create default settings
     await prisma.settings.create({
       data: {
+        id: nanoid(),
         userId: user.id,
+        updatedAt: new Date(),
       },
     });
 
     // Log signup
     await prisma.auditLog.create({
       data: {
+        id: nanoid(),
         userId: user.id,
         action: 'SIGN_UP',
         resource: 'USER',

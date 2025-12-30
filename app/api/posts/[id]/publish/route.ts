@@ -4,6 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { requireAuth, getLinkedInToken } from '@/lib/middleware/auth';
 import { formatErrorResponse, NotFoundError, AuthorizationError } from '@/lib/errors';
@@ -72,6 +73,7 @@ export async function POST(
     // Log analytics
     await prisma.analytics.create({
       data: {
+        id: nanoid(),
         userId: user.id,
         postId: post.id,
         eventType: 'POST_PUBLISHED',

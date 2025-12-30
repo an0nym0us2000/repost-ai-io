@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/middleware/auth';
 import { formatErrorResponse } from '@/lib/errors';
@@ -27,7 +28,9 @@ export async function GET(req: NextRequest) {
     if (!settings) {
       settings = await prisma.settings.create({
         data: {
+          id: nanoid(),
           userId: user.id,
+          updatedAt: new Date(),
         },
       });
     }
@@ -104,7 +107,9 @@ export async function PATCH(req: NextRequest) {
       where: { userId: user.id },
       update: data,
       create: {
+        id: nanoid(),
         userId: user.id,
+        updatedAt: new Date(),
         ...data,
       },
     });

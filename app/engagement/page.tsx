@@ -47,7 +47,7 @@ export default function EngagementPage() {
     }
   };
 
-  const handleOpenActivity = (linkedinUrl: string | null) => {
+  const handleOpenActivity = (linkedinUrl: string | null | undefined) => {
     if (linkedinUrl) {
       // Add /recent-activity/all/ to the LinkedIn profile URL
       const activityUrl = `${linkedinUrl}/recent-activity/all/`;

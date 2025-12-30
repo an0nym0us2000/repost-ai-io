@@ -7,6 +7,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import LinkedInProvider from 'next-auth/providers/linkedin';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
+import { nanoid } from 'nanoid';
 import prisma from './prisma';
 import { Adapter } from 'next-auth/adapters';
 import logger from './logger';
@@ -203,6 +204,7 @@ export const authOptions: NextAuthOptions = {
 
         await prisma.auditLog.create({
           data: {
+            id: nanoid(),
             userId: user.id,
             action: 'SIGN_IN',
             resource: 'AUTH',
@@ -229,6 +231,7 @@ export const authOptions: NextAuthOptions = {
 
         await prisma.auditLog.create({
           data: {
+            id: nanoid(),
             userId: token.id as string,
             action: 'SIGN_OUT',
             resource: 'AUTH',

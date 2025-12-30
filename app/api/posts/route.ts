@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/middleware/auth';
 import { formatErrorResponse, ValidationError } from '@/lib/errors';
@@ -138,6 +139,7 @@ export async function POST(req: NextRequest) {
     // Create post (excluding embedding which needs raw SQL)
     const post = await prisma.post.create({
       data: {
+        id: nanoid(),
         userId: user.id,
         content: content!,
         topic: data.topic,
@@ -149,6 +151,7 @@ export async function POST(req: NextRequest) {
         status: data.scheduledFor ? PostStatus.SCHEDULED : PostStatus.DRAFT,
         scheduledFor: data.scheduledFor ? new Date(data.scheduledFor) : null,
         mediaUrls: data.mediaUrls || [],
+        updatedAt: new Date(),
       },
     });
 
@@ -165,6 +168,7 @@ export async function POST(req: NextRequest) {
     // Log analytics
     await prisma.analytics.create({
       data: {
+        id: nanoid(),
         userId: user.id,
         postId: post.id,
         eventType: 'POST_CREATED',

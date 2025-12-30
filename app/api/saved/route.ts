@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/middleware/auth';
 import { formatErrorResponse } from '@/lib/errors';
@@ -103,6 +104,7 @@ export async function POST(req: NextRequest) {
     // Save post
     const savedPost = await prisma.savedPost.create({
       data: {
+        id: nanoid(),
         userId: user.id,
         postId: data.postId,
       },

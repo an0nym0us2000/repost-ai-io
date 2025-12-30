@@ -294,6 +294,7 @@ export default function TrendingPage() {
                   hasCTA: null,
                   postType: "all",
                   sortBy: 'outlier',
+                  followedOnly: false,
                 })}
                 className="px-4 py-2 rounded-lg text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-all"
               >
@@ -351,6 +352,7 @@ export default function TrendingPage() {
                 hasCTA: null,
                 postType: "all",
                 sortBy: 'outlier',
+                followedOnly: false,
               })}
               className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-all shadow-md"
             >

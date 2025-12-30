@@ -88,7 +88,7 @@ export default function CreatorsPage() {
     }
   };
 
-  const handleOpenActivity = (linkedinUrl: string | null) => {
+  const handleOpenActivity = (linkedinUrl: string | null | undefined) => {
     if (linkedinUrl) {
       window.open(linkedinUrl, '_blank');
     } else {

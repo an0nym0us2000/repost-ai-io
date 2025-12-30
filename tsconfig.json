@@ -36,6 +36,11 @@
     ".next/dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "app.easygen.io",
+    "_DataURI",
+    "js.stripe.com",
+    "m.stripe.network",
+    "media.licdn.com"
   ]
 }

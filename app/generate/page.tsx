@@ -430,7 +430,7 @@ export default function GeneratePage() {
                           onClick={(e) => {
                             e.stopPropagation();
                             if (isTopicSaved(suggestedTopic)) {
-                              toast.info("Topic already saved");
+                              toast("Topic already saved");
                             } else {
                               handleSaveTopic(suggestedTopic);
                             }

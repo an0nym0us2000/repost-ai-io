@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { verifyCronSecret } from '@/lib/middleware/auth';
 import { formatErrorResponse } from '@/lib/errors';
@@ -35,15 +36,15 @@ export async function POST(req: NextRequest) {
         },
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
-            settings: {
+            Settings: {
               select: {
                 autoSyncEngagement: true,
               },
             },
-            accounts: {
+            Account: {
               where: {
                 provider: 'linkedin',
               },
@@ -67,13 +68,13 @@ export async function POST(req: NextRequest) {
     for (const post of publishedPosts) {
       try {
         // Skip if auto-sync disabled
-        if (post.user.settings?.autoSyncEngagement === false) {
+        if (post.User.Settings?.autoSyncEngagement === false) {
           results.skipped++;
           continue;
         }
 
         // Get LinkedIn account (already filtered by provider in query)
-        const linkedInAccount = post.user.accounts[0];
+        const linkedInAccount = post.User.Account[0];
 
         if (!linkedInAccount?.access_token || !post.linkedInPostId) {
           results.skipped++;
@@ -131,6 +132,7 @@ export async function POST(req: NextRequest) {
         } else {
           await prisma.analytics.create({
             data: {
+              id: nanoid(),
               userId: post.userId,
               postId: post.id,
               date: today,

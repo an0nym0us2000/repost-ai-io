@@ -84,7 +84,7 @@ export async function GET(req: NextRequest) {
         views: true,
         mediaUrls: true,
         userId: true,
-        user: {
+        User: {
           select: {
             id: true,
             name: true,

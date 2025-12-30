@@ -1,5 +1,6 @@
 import { PrismaClient, Plan, Tone, Intensity } from '@prisma/client';
 import { hash } from 'bcryptjs';
+import { nanoid } from 'nanoid';
 
 const prisma = new PrismaClient();
 
@@ -17,12 +18,14 @@ async function createDemoUser() {
         plan: Plan.PRO,
       },
       create: {
+        id: nanoid(),
         email: 'demo@reepost.ai',
         password: hashedPassword,
         name: 'Demo User',
         plan: Plan.PRO,
         defaultTone: Tone.PROFESSIONAL,
         defaultIntensity: Intensity.MEDIUM,
+        updatedAt: new Date(),
       },
     });
 

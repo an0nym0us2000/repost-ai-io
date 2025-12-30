@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { nanoid } from 'nanoid';
 import { createEmbedding } from '@/lib/embedding';
 import { searchSimilarPosts } from '@/lib/vector-search';
 import { extractPostPatterns, generateStyleGuide } from '@/lib/pattern-extraction';
@@ -56,7 +57,11 @@ export async function POST(request: NextRequest) {
     // Create default settings if not exists
     if (!userSettings) {
       userSettings = await prisma.settings.create({
-        data: { userId: user.id },
+        data: {
+          id: nanoid(),
+          userId: user.id,
+          updatedAt: new Date(),
+        },
       });
     }
 

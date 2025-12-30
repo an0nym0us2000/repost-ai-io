@@ -5,6 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { nanoid } from 'nanoid';
 import prisma from '@/lib/prisma';
 import { verifyCronSecret } from '@/lib/middleware/auth';
 import { formatErrorResponse } from '@/lib/errors';
@@ -31,11 +32,11 @@ export async function POST(req: NextRequest) {
         },
       },
       include: {
-        user: {
+        User: {
           select: {
             id: true,
             linkedInUrn: true,
-            accounts: {
+            Account: {
               where: {
                 provider: 'linkedin',
               },
@@ -60,16 +61,16 @@ export async function POST(req: NextRequest) {
     for (const post of scheduledPosts) {
       try {
         // Get LinkedIn account (already filtered by provider in query)
-        const linkedInAccount = post.user.accounts[0];
+        const linkedInAccount = post.User.Account[0];
 
-        if (!linkedInAccount?.access_token || !post.user.linkedInUrn) {
+        if (!linkedInAccount?.access_token || !post.User.linkedInUrn) {
           throw new Error('LinkedIn connection required');
         }
 
         // Publish to LinkedIn
         const linkedInPostId = await publishToLinkedIn({
           accessToken: linkedInAccount.access_token,
-          personUrn: post.user.linkedInUrn,
+          personUrn: post.User.linkedInUrn,
           content: post.content,
           mediaUrls: post.mediaUrls,
         });
@@ -87,6 +88,7 @@ export async function POST(req: NextRequest) {
         // Log analytics
         await prisma.analytics.create({
           data: {
+            id: nanoid(),
             userId: post.userId,
             postId: post.id,
             eventType: 'POST_PUBLISHED',

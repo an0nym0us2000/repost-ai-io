@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 interface TrendingPost {
     id: string;
     content: string;
+    linkedInPostId: string | null;
+    postUrl: string | null;
+    postType?: string | null;
     mediaUrl?: string;
     mediaType: "IMAGE" | "VIDEO" | "DOCUMENT" | "NONE";
     likes: number;
@@ -16,15 +19,21 @@ interface TrendingPost {
     reposts: number;
     views: number;
     outlierIndex: number;
+    wordCount?: number | null;
+    hasQuestion?: boolean | null;
+    hasCallToAction?: boolean | null;
+    postedHour?: number | null;
+    postedDayOfWeek?: string | null;
     publishedDate: string;
-    postUrl?: string | null;
-    linkedInPostId?: string | null;
+    keywords?: string[];
     creator: {
         id: string;
         name: string;
-        image?: string;
-        occupation?: string;
-        headline?: string;
+        username?: string | null;
+        headline: string | null;
+        image: string | null;
+        linkedinUrl?: string | null;
+        followerCount?: number;
     };
 }
 
@@ -116,8 +125,8 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
                     <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
                             <h3 className="font-semibold text-gray-900 truncate">{post.creator.name}</h3>
-                            {(post.creator.occupation || post.creator.headline) && (
-                                <p className="text-sm text-gray-600 truncate">{post.creator.occupation || post.creator.headline}</p>
+                            {post.creator.headline && (
+                                <p className="text-sm text-gray-600 truncate">{post.creator.headline}</p>
                             )}
                             <p className="text-xs text-gray-500 mt-1">
                                 {formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true })}

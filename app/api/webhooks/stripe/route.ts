@@ -5,6 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { headers } from 'next/headers';
+import { nanoid } from 'nanoid';
 import Stripe from 'stripe';
 import { stripe, getPlanFromPriceId } from '@/lib/stripe';
 import prisma from '@/lib/prisma';
@@ -258,6 +259,7 @@ async function updateUserSubscription(userId: string, subscription: Stripe.Subsc
       stripeSubscriptionId: subscription.id,
     },
     create: {
+      id: nanoid(),
       userId,
       stripeSubscriptionId: subscription.id,
       stripePriceId: priceId!,
@@ -267,6 +269,7 @@ async function updateUserSubscription(userId: string, subscription: Stripe.Subsc
       currentPeriodEnd: new Date(sub.current_period_end * 1000),
       cancelAtPeriodEnd: subscription.cancel_at_period_end,
       plan,
+      updatedAt: new Date(),
     },
     update: {
       status,
