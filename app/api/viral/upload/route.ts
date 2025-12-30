@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { createEmbeddingsBatch } from '@/lib/embedding';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 // Type for viral post input
 interface ViralPostInput {
   text: string;

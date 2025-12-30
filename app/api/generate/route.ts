@@ -11,6 +11,9 @@ import { formatErrorResponse } from '@/lib/errors';
 import logger from '@/lib/logger';
 import OpenAI from 'openai';
 
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 // Lazy-initialized OpenAI client
 let openaiClient: OpenAI | null = null;
 function getOpenAI(): OpenAI {
