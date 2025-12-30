@@ -4,9 +4,22 @@ import { prisma } from '@/lib/prisma';
 import { extractPostPatterns } from '@/lib/pattern-extraction';
 import { ViralPostResult } from '@/lib/vector-search';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
+let openaiClient: OpenAI | null = null;
+
+function getOpenAI(): OpenAI {
+  if (!openaiClient) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY environment variable is not set');
+    }
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+  }
+  return openaiClient;
+}
 
 /**
  * POST /api/viral/repurpose
@@ -123,6 +136,7 @@ Generate ONLY the new post content, without any labels or meta-commentary.`;
 
     // Step 5: Generate repurposed content
     console.log('Generating repurposed content...');
+    const openai = getOpenAI();
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
