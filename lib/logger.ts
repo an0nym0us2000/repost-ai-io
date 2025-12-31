@@ -6,6 +6,34 @@
 import winston from 'winston';
 
 const logLevel = process.env.LOG_LEVEL || 'info';
+const isProduction = process.env.NODE_ENV === 'production';
+const isVercel = !!process.env.VERCEL;
+
+// Configure transports based on environment
+const transports: winston.transport[] = [];
+
+// In production (especially Vercel), only use console transport
+if (isProduction || isVercel) {
+  transports.push(
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.json()
+      ),
+    })
+  );
+} else {
+  // In development, use both file and console transports
+  transports.push(
+    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+    new winston.transports.File({ filename: 'logs/combined.log' }),
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    })
+  );
+}
 
 const logger = winston.createLogger({
   level: logLevel,
@@ -18,25 +46,8 @@ const logger = winston.createLogger({
     winston.format.json()
   ),
   defaultMeta: { service: 'easygen-platform' },
-  transports: [
-    // Write all logs with importance level of `error` or less to `error.log`
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    // Write all logs to `combined.log`
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
+  transports,
 });
-
-// If we're not in production, log to the console
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
-      ),
-    })
-  );
-}
 
 // Create logs directory if it doesn't exist (handled by winston)
 export default logger;
