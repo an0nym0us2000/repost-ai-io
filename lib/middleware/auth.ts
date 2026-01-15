@@ -72,11 +72,25 @@ export async function getLinkedInToken(): Promise<string> {
 
 /**
  * Verify cron secret for scheduled jobs
+ * Supports both Vercel cron (x-vercel-cron header) and manual triggers (Bearer token)
  */
 export function verifyCronSecret(req: NextRequest): void {
   const authHeader = req.headers.get('authorization');
+  const isVercelCron = req.headers.get('x-vercel-cron') === '1';
+  const cronSecret = process.env.CRON_SECRET;
 
-  if (!authHeader || authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    throw new AuthorizationError('Invalid cron secret');
+  // In production, require EITHER Vercel cron header OR valid secret
+  if (process.env.NODE_ENV === 'production' || process.env.VERCEL) {
+    // Must be from Vercel OR have valid secret
+    const hasValidSecret = cronSecret && authHeader === `Bearer ${cronSecret}`;
+
+    if (!isVercelCron && !hasValidSecret) {
+      throw new AuthorizationError('Invalid cron authentication - must be from Vercel or include valid secret');
+    }
+  } else {
+    // In development, require secret
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+      throw new AuthorizationError('Invalid cron secret');
+    }
   }
 }

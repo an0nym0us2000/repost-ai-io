@@ -50,25 +50,39 @@ export async function searchSimilarPosts(
       throw new Error('Invalid embedding: must be array of 1536 numbers');
     }
 
+    // Validate minSimilarity to prevent SQL injection
+    if (typeof minSimilarity !== 'number' || minSimilarity < 0 || minSimilarity > 1 || isNaN(minSimilarity)) {
+      throw new Error('Invalid minSimilarity: must be a number between 0 and 1');
+    }
+
+    // Validate limit
+    if (typeof limit !== 'number' || limit < 1 || limit > 1000 || isNaN(limit)) {
+      throw new Error('Invalid limit: must be a number between 1 and 1000');
+    }
+
     // Convert embedding to pgvector format
     const embeddingStr = `[${queryEmbedding.join(',')}]`;
 
-    // Build query with optional filters
+    // Build query with optional filters - using parameterized queries
     let whereClause = '';
-    const params: any[] = [embeddingStr, limit];
+    const params: any[] = [embeddingStr, minSimilarity, limit];
+    let paramIndex = 4;
 
     if (category) {
-      whereClause += ' AND topic_category = $3';
+      whereClause += ` AND topic_category = $${paramIndex}`;
       params.push(category);
+      paramIndex++;
     }
 
     if (tone) {
-      whereClause += ` AND tone_detected = $${params.length + 1}`;
+      whereClause += ` AND tone_detected = $${paramIndex}`;
       params.push(tone);
+      paramIndex++;
     }
 
     // Perform similarity search using cosine distance
     // Note: pgvector uses distance (lower is better), so we convert to similarity
+    // FIXED: Using parameterized query for minSimilarity
     const query = `
       SELECT
         id::text,
@@ -82,10 +96,10 @@ export async function searchSimilarPosts(
         1 - (embedding <=> $1::vector) as similarity
       FROM viral_posts
       WHERE embedding IS NOT NULL
-        AND (1 - (embedding <=> $1::vector)) >= ${minSimilarity}
+        AND (1 - (embedding <=> $1::vector)) >= $2
         ${whereClause}
       ORDER BY embedding <=> $1::vector
-      LIMIT $2
+      LIMIT $3
     `;
 
     const results = await prisma.$queryRawUnsafe<ViralPostResult[]>(query, ...params);

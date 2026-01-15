@@ -3,7 +3,7 @@
 import { useState, Suspense, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Linkedin, Mail, Lock, User, Loader2 } from "lucide-react";
+import { Mail, Lock, User, Loader2 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -25,18 +25,10 @@ function SignInForm() {
     useEffect(() => {
         if (error) {
             const errorMessages: Record<string, string> = {
-                OAuthSignin: "Error starting OAuth sign-in",
-                OAuthCallback: "Error during OAuth callback",
-                OAuthCreateAccount: "Could not create OAuth account",
-                EmailCreateAccount: "Could not create email account",
-                Callback: "Error during callback - please try again",
-                OAuthAccountNotLinked: "Email already linked to another account. Try signing in with your original method.",
                 CredentialsSignin: "Invalid email or password",
                 EmailSignin: "Error sending verification email",
                 SessionRequired: "Please sign in to continue",
-                Configuration: "LinkedIn sign-in is not properly configured. Please contact support.",
-                AccessDenied: "Access denied. Your LinkedIn profile may be missing required information (email).",
-                Verification: "Verification link expired or invalid",
+                Callback: "Error during callback - please try again",
                 default: "An error occurred during sign-in. Please try again.",
             };
             toast.error(errorMessages[error] || errorMessages.default);
@@ -97,57 +89,11 @@ function SignInForm() {
         }
     };
 
-    const handleLinkedInSignIn = async () => {
-        setIsLoading(true);
-        try {
-            // Let NextAuth handle the redirect automatically
-            await signIn("linkedin", {
-                callbackUrl,
-                redirect: true  // Changed to true - NextAuth will handle the redirect
-            });
-            // If redirect is true, this code won't execute as the page will redirect
-        } catch (error: any) {
-            console.error("LinkedIn sign-in error:", error);
-            toast.error("An error occurred during LinkedIn sign-in. Please try again.");
-            setIsLoading(false);
-        }
-    };
-
     return (
         <>
             <h2 className="text-2xl font-bold text-text-primary mb-6 text-center">
                 {isSignUp ? "Create Account" : "Welcome Back"}
             </h2>
-
-            {/* LinkedIn Sign In - Only show if configured */}
-            {process.env.NEXT_PUBLIC_LINKEDIN_ENABLED !== 'false' && (
-                <button
-                    onClick={handleLinkedInSignIn}
-                    disabled={isLoading}
-                    className="w-full flex items-center justify-center space-x-3 py-3 px-4 border-2 border-[#0077B5] text-[#0077B5] rounded-xl font-semibold hover:bg-[#0077B5] hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                    {isLoading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                        <>
-                            <Linkedin className="w-5 h-5" />
-                            <span>Continue with LinkedIn</span>
-                        </>
-                    )}
-                </button>
-            )}
-
-            {/* Divider */}
-            <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-border"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-text-secondary">
-                        or continue with email
-                    </span>
-                </div>
-            </div>
 
             {/* Credentials Form */}
             <form onSubmit={handleCredentialsSubmit} className="space-y-4">
