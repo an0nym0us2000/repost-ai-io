@@ -37,7 +37,6 @@
   ],
   "exclude": [
     "node_modules",
-    "app.easygen.io",
     "_DataURI",
     "js.stripe.com",
     "m.stripe.network",

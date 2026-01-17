@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { Upload, Mic, FileText, Wand2, RefreshCw, Bookmark, BookmarkCheck, Trash2 } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Wand2, RefreshCw, Bookmark, BookmarkCheck, Trash2, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import ToneModal from "@/components/modals/ToneModal";
 import PostPreview from "@/components/post/PostPreview";
@@ -14,13 +14,26 @@ interface SavedTopic {
   createdAt: string;
 }
 
+// Wrapper component to handle Suspense for useSearchParams
 export default function GeneratePage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+      </div>
+    }>
+      <GeneratePageContent />
+    </Suspense>
+  );
+}
+
+function GeneratePageContent() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [activeTab, setActiveTab] = useState<"your-topic" | "suggested" | "saved">("your-topic");
   const [topic, setTopic] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedTone, setSelectedTone] = useState<string>("Professional");
   const [toneIntensity, setToneIntensity] = useState(50);
   const [showToneModal, setShowToneModal] = useState(false);
@@ -33,6 +46,27 @@ export default function GeneratePage() {
   const [isLoadingTopics, setIsLoadingTopics] = useState(false);
   const [savedTopics, setSavedTopics] = useState<SavedTopic[]>([]);
   const [isLoadingSavedTopics, setIsLoadingSavedTopics] = useState(false);
+
+  // Check for repurpose content from trending posts
+  useEffect(() => {
+    const isRepurpose = searchParams.get('repurpose') === 'true';
+    if (isRepurpose) {
+      const repurposeContent = sessionStorage.getItem('repurposeContent');
+      const repurposeCreator = sessionStorage.getItem('repurposeCreator');
+
+      if (repurposeContent) {
+        // Set the content as a topic/inspiration
+        const inspirationText = `Repurpose this viral post (originally by ${repurposeCreator || 'a creator'}):\n\n${repurposeContent}`;
+        setTopic(inspirationText);
+
+        // Clean up sessionStorage
+        sessionStorage.removeItem('repurposeContent');
+        sessionStorage.removeItem('repurposeCreator');
+
+        toast.success("Content loaded! Edit the topic and generate your own version.");
+      }
+    }
+  }, [searchParams]);
 
   // Load user settings and topics on mount
   useEffect(() => {
@@ -82,14 +116,6 @@ export default function GeneratePage() {
       // Continue with defaults if settings fail to load
     } finally {
       setIsLoadingSettings(false);
-    }
-  };
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      toast.success(`File uploaded: ${file.name}`);
     }
   };
 
@@ -293,40 +319,6 @@ export default function GeneratePage() {
           {/* Tab Content */}
           {activeTab === "your-topic" ? (
             <div className="space-y-6">
-              {/* File Upload */}
-              <div className="card p-6">
-                <label className="block text-sm font-medium text-text-primary mb-3">
-                  Upload Media (Optional)
-                </label>
-                <div className="border-2 border-dashed border-border rounded-card p-8 text-center hover:border-primary transition-colors cursor-pointer">
-                  <input
-                    type="file"
-                    onChange={handleFileUpload}
-                    className="hidden"
-                    id="file-upload"
-                    accept="image/*,audio/*,.pdf,.doc,.docx"
-                  />
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <div className="flex flex-col items-center space-y-3">
-                      <div>
-                        <p className="text-sm font-medium text-text-primary">
-                          {selectedFile
-                            ? selectedFile.name
-                            : "Drop your file here or click to browse"}
-                        </p>
-                        <p className="text-xs text-text-secondary mt-1">
-                          Supports images, audio, and documents
-                        </p>
-                      </div>
-                      <div className="flex space-x-2 mt-2">
-                        <FileText className="w-4 h-4 text-text-secondary" />
-                        <Mic className="w-4 h-4 text-text-secondary" />
-                      </div>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
               {/* Topic Input */}
               <div className="card p-6">
                 <label className="block text-sm font-medium text-text-primary mb-3">

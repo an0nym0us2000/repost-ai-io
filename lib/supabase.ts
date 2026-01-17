@@ -35,7 +35,7 @@ export const supabaseAdmin = new Proxy({} as SupabaseClient, {
 });
 
 // Storage bucket name
-export const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || 'easygen-uploads';
+export const STORAGE_BUCKET = process.env.SUPABASE_STORAGE_BUCKET || 'repost-ai-uploads';
 
 /**
  * Upload file to Supabase Storage

@@ -64,6 +64,7 @@ export default function TrendingPage() {
   });
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [filters, setFilters] = useState<FilterState>({
     mediaType: "all",
     minEngagement: 0,
@@ -75,9 +76,17 @@ export default function TrendingPage() {
     followedOnly: false,
   });
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   useEffect(() => {
     fetchPosts();
-  }, [filters, searchQuery]);
+  }, [filters, debouncedSearch]);
 
   const fetchPosts = async () => {
     try {
@@ -107,6 +116,9 @@ export default function TrendingPage() {
       }
       if (filters.followedOnly) {
         params.append('followedOnly', 'true');
+      }
+      if (debouncedSearch.trim()) {
+        params.append('search', debouncedSearch.trim());
       }
 
       const response = await fetch(`/api/trending-posts?${params}`);

@@ -17,12 +17,22 @@ export async function GET(request: NextRequest) {
         const hasCTA = searchParams.get('hasCTA');
         const followedOnly = searchParams.get('followedOnly') === 'true';
         const limit = parseInt(searchParams.get('limit') || '50');
+        const search = searchParams.get('search');
 
         // Get session to check for followed creators filter
         const session = await getServerSession(authOptions);
 
         // Build where clause
         const where: any = {};
+
+        // Add search filter
+        if (search && search.trim()) {
+            where.OR = [
+                { content: { contains: search, mode: 'insensitive' } },
+                { creator: { name: { contains: search, mode: 'insensitive' } } },
+                { keywords: { has: search.toLowerCase() } },
+            ];
+        }
 
         // Filter by followed creators if requested and user is authenticated
         if (followedOnly && session?.user?.id) {

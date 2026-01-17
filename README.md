@@ -45,7 +45,7 @@ A modern SaaS platform for generating viral LinkedIn posts using AI. Create, sch
 1. Clone the repository:
 ```bash
 git clone <your-repo-url>
-cd easygen-claude
+cd repost-ai-io
 ```
 
 2. Install dependencies:
@@ -70,7 +70,7 @@ npm start
 ## Project Structure
 
 ```
-easygen-claude/
+repost-ai-io/
 ├── app/                      # Next.js app directory
 │   ├── page.tsx             # Dashboard / Generate Post
 │   ├── my-posts/            # Post management

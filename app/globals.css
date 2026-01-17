@@ -147,16 +147,83 @@
   @apply bg-gray-900 text-gray-100;
 }
 
+.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
 .dark .card {
-  @apply bg-gray-800;
+  @apply bg-gray-800 border-gray-700;
 }
 
 .dark .input-field {
   @apply bg-gray-800 border-gray-700 text-gray-100;
 }
 
+.dark .input-field::placeholder {
+  @apply text-gray-400;
+}
+
+.dark .btn-primary {
+  @apply bg-primary hover:bg-primary-dark text-white;
+}
+
 .dark .btn-secondary {
   @apply bg-gray-800 hover:bg-gray-700 border-gray-700 text-gray-100;
+}
+
+.dark .tab-active {
+  @apply text-primary border-primary;
+}
+
+.dark .tab-inactive {
+  @apply text-gray-400 hover:text-gray-200;
+}
+
+/* Dark mode for layout elements */
+.dark header,
+.dark nav,
+.dark aside {
+  @apply bg-gray-900 border-gray-700;
+}
+
+.dark main {
+  @apply bg-gray-900;
+}
+
+/* Dark mode text colors */
+.dark .text-text-primary {
+  @apply text-gray-100;
+}
+
+.dark .text-text-secondary {
+  @apply text-gray-400;
+}
+
+/* Dark mode backgrounds */
+.dark .bg-background {
+  @apply bg-gray-900;
+}
+
+.dark .bg-card-bg {
+  @apply bg-gray-800;
+}
+
+.dark .bg-white {
+  @apply bg-gray-900;
+}
+
+/* Dark mode borders */
+.dark .border-border {
+  @apply border-gray-700;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-thumb {
+  background: #4B5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6B7280;
 }
 
 /* Landing Page Styles - Glassmorphism */

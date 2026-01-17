@@ -240,6 +240,7 @@ model User {
   Settings               Settings?
   Subscription           Subscription[]
   FollowedCreator        FollowedCreator[]
+  SavedViralPost         SavedViralPost[]
 
   @@index([email])
   @@index([linkedInId])
@@ -419,7 +420,8 @@ model TrendingPost {
   
   // Relationships
   creator           TrendingCreator @relation(fields: [creatorId], references: [id], onDelete: Cascade)
-  
+  savedBy           SavedViralPost[]
+
   @@index([creatorId])
   @@index([publishedDate])
   @@index([outlierIndex])
@@ -447,4 +449,19 @@ model FollowedCreator {
   @@unique([userId, creatorId])
   @@index([userId])
   @@index([creatorId])
+}
+
+/// Saved viral/trending posts for users
+model SavedViralPost {
+  id           String        @id @default(cuid())
+  userId       String
+  viralPostId  String
+  savedAt      DateTime      @default(now())
+
+  User         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  viralPost    TrendingPost  @relation(fields: [viralPostId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, viralPostId])
+  @@index([userId])
+  @@index([viralPostId])
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Play, Sparkles, TrendingUp, Users } from "lucide-react";
+import { Sparkles, TrendingUp, Users } from "lucide-react";
 
 const avatars = [
   { name: "Sarah Chen", image: "https://i.pravatar.cc/150?img=1" },
@@ -14,8 +13,6 @@ const avatars = [
 ];
 
 export default function NewHero() {
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
-
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
@@ -104,7 +101,7 @@ export default function NewHero() {
             required.
           </motion.p>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <motion.div
             variants={fadeInUp}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
@@ -116,13 +113,6 @@ export default function NewHero() {
               <span>Get Started — It's Free</span>
               <TrendingUp className="w-5 h-5" />
             </Link>
-            <button
-              onClick={() => setIsVideoModalOpen(true)}
-              className="w-full sm:w-auto bg-white hover:bg-gray-50 text-primary border-2 border-primary px-8 py-4 rounded-xl font-semibold text-lg transition-all hover:shadow-xl flex items-center justify-center space-x-2"
-            >
-              <Play className="w-5 h-5" />
-              <span>Watch Demo</span>
-            </button>
           </motion.div>
 
           {/* Subtext */}
@@ -171,34 +161,6 @@ export default function NewHero() {
         </motion.div>
       </div>
 
-      {/* Video Modal */}
-      {isVideoModalOpen && (
-        <div
-          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
-          onClick={() => setIsVideoModalOpen(false)}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="relative w-full max-w-4xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setIsVideoModalOpen(false)}
-              className="absolute top-4 right-4 z-10 bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-2 rounded-full transition-all"
-            >
-              <Play className="w-6 h-6 rotate-90" />
-            </button>
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </motion.div>
-        </div>
-      )}
     </section>
   );
 }

@@ -52,10 +52,15 @@ export default function SettingsPage() {
       const response = await fetch("/api/settings");
       if (response.ok) {
         const data = await response.json();
+        // Normalize contentLength to uppercase (database stores lowercase, UI uses uppercase)
+        const normalizedContentLength = data.contentLength
+          ? data.contentLength.toUpperCase()
+          : "MEDIUM";
+
         setAiPreferences({
           defaultTone: data.defaultTone || "PROFESSIONAL",
           defaultIntensity: data.defaultIntensity || "MEDIUM",
-          contentLength: data.contentLength || "MEDIUM",
+          contentLength: normalizedContentLength,
         });
         setNotifications({
           emailNotifications: data.emailNotifications ?? true,

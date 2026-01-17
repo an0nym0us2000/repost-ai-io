@@ -187,7 +187,7 @@ npm run build
 
 ## 🎉 Ready to Build!
 
-Your EasyGen platform is ready to use. Start generating content, explore the features, and customize it to match your needs.
+Your Repost Ai platform is ready to use. Start generating content, explore the features, and customize it to match your needs.
 
 For questions or issues, check the main README.md or create an issue in the repository.
 

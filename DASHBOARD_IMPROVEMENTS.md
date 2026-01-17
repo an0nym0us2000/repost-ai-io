@@ -2,7 +2,7 @@
 
 ## ✅ Completed Enhancements
 
-We've completely overhauled the **Repost Ai** dashboard with modern, professional components inspired by leading SaaS applications like EasyGen.
+We've completely overhauled the **Repost Ai** dashboard with modern, professional components inspired by leading SaaS applications.
 
 ---
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { Heart, MessageCircle, Repeat2, Eye, Bookmark, Copy, ExternalLink } from "lucide-react";
+import { Eye, Bookmark, Copy, Wand2 } from "lucide-react";
 import Image from "next/image";
 import { formatDistanceToNow } from "date-fns";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 interface TrendingPost {
@@ -42,8 +43,27 @@ interface TrendingPostCardProps {
 }
 
 export default function TrendingPostCard({ post }: TrendingPostCardProps) {
+    const router = useRouter();
     const [isSaved, setIsSaved] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const [showFullContent, setShowFullContent] = useState(false);
+
+    // Check if post is saved on mount
+    useEffect(() => {
+        checkIfSaved();
+    }, []);
+
+    const checkIfSaved = async () => {
+        try {
+            const response = await fetch(`/api/saved-viral-posts/check?viralPostId=${post.id}`);
+            if (response.ok) {
+                const data = await response.json();
+                setIsSaved(data.isSaved);
+            }
+        } catch (error) {
+            // Silently fail - user may not be logged in
+        }
+    };
 
     const formatNumber = (num: number): string => {
         if (num >= 1000000) {
@@ -86,9 +106,57 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
         toast.success("Content copied to clipboard!");
     };
 
-    const handleSave = () => {
-        setIsSaved(!isSaved);
-        toast.success(isSaved ? "Removed from saved" : "Saved to collection!");
+    const handleSave = async () => {
+        if (isSaving) return;
+
+        setIsSaving(true);
+        try {
+            if (isSaved) {
+                // Unsave the post
+                const response = await fetch(`/api/saved-viral-posts/${post.id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    setIsSaved(false);
+                    toast.success("Removed from saved");
+                } else {
+                    const data = await response.json();
+                    toast.error(data.error?.message || "Failed to remove from saved");
+                }
+            } else {
+                // Save the post
+                const response = await fetch('/api/saved-viral-posts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ viralPostId: post.id }),
+                });
+
+                if (response.ok) {
+                    setIsSaved(true);
+                    toast.success("Saved to collection!");
+                } else {
+                    const data = await response.json();
+                    if (response.status === 401) {
+                        toast.error("Please sign in to save posts");
+                    } else {
+                        toast.error(data.error?.message || "Failed to save post");
+                    }
+                }
+            }
+        } catch (error) {
+            toast.error("An error occurred");
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleRepurpose = () => {
+        // Store the content in sessionStorage and redirect to generate page
+        sessionStorage.setItem('repurposeContent', post.content);
+        sessionStorage.setItem('repurposeCreator', post.creator.name);
+        router.push('/generate?repurpose=true');
+        toast.success("Opening in post generator...");
     };
 
     const handleViewPost = () => {
@@ -254,15 +322,13 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
                             <span className="font-medium">Save</span>
                         </button>
                     </div>
-                    {post.postUrl && (
-                        <button
-                            onClick={handleViewPost}
-                            className="text-sm text-primary hover:text-primary-dark transition-colors flex items-center gap-1.5 font-medium"
-                        >
-                            <span>Repurpose</span>
-                            <ExternalLink className="w-4 h-4" />
-                        </button>
-                    )}
+                    <button
+                        onClick={handleRepurpose}
+                        className="text-sm text-primary hover:text-primary-dark transition-colors flex items-center gap-1.5 font-medium"
+                    >
+                        <span>Repurpose</span>
+                        <Wand2 className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
         </div>

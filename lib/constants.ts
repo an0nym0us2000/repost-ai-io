@@ -2,7 +2,7 @@
  * Application Constants
  */
 
-export const APP_NAME = 'EasyGen';
+export const APP_NAME = 'Repost Ai';
 export const APP_DESCRIPTION = 'AI-Powered LinkedIn Content Generation Platform';
 
 // Plan Limits

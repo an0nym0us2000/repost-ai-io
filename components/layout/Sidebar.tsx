@@ -63,7 +63,7 @@ export default function Sidebar() {
     <aside className="w-64 bg-white border-r border-border flex flex-col h-full">
       {/* Logo */}
       <div className="p-6 border-b border-border">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/generate" className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
             <Sparkles className="w-5 h-5 text-white" />
           </div>
@@ -93,20 +93,6 @@ export default function Sidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-border">
-        <div className="card p-4">
-          <p className="text-sm font-medium text-text-primary mb-1">
-            Need Help?
-          </p>
-          <p className="text-xs text-text-secondary mb-3">
-            Check out our guide to get started
-          </p>
-          <button className="w-full text-sm bg-primary/10 text-primary py-2 rounded-lg hover:bg-primary/20 transition-colors">
-            View Guide
-          </button>
-        </div>
-      </div>
     </aside>
   );
 }

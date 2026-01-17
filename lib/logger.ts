@@ -45,7 +45,7 @@ const logger = winston.createLogger({
     winston.format.splat(),
     winston.format.json()
   ),
-  defaultMeta: { service: 'easygen-platform' },
+  defaultMeta: { service: 'repost-ai-platform' },
   transports,
 });
 
