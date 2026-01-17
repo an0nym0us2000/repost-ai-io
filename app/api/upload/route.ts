@@ -11,11 +11,11 @@ import { extractTextFromFile } from '@/lib/extractors';
 
 // File upload security configuration
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = {
+const ALLOWED_TYPES: Record<string, string[]> = {
   images: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
   documents: ['application/pdf', 'text/plain', 'text/csv', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
   media: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'],
-} as const;
+};
 
 /**
  * Validate file upload security
@@ -38,8 +38,8 @@ function validateFileUpload(file: File, folder: string): { valid: boolean; error
   }
 
   // Validate folder type
-  const folderKey = folder as keyof typeof ALLOWED_TYPES;
-  if (!ALLOWED_TYPES[folderKey]) {
+  const allowedTypes = ALLOWED_TYPES[folder];
+  if (!allowedTypes) {
     return {
       valid: false,
       error: `Invalid folder type. Allowed: ${Object.keys(ALLOWED_TYPES).join(', ')}`,
@@ -47,8 +47,7 @@ function validateFileUpload(file: File, folder: string): { valid: boolean; error
   }
 
   // Validate file type
-  const allowedTypes = ALLOWED_TYPES[folderKey];
-  if (!allowedTypes.includes(file.type as any)) {
+  if (!allowedTypes.includes(file.type)) {
     return {
       valid: false,
       error: `Invalid file type for ${folder}. Allowed types: ${allowedTypes.join(', ')}`,
