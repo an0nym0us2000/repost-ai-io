@@ -61,7 +61,7 @@
 ## Directory Structure
 
 ```
-easygen-claude/
+repost-ai-io/
 │
 ├── app/                          # Next.js App Router
 │   ├── layout.tsx               # Root layout with Sidebar & TopBar

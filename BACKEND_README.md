@@ -1,6 +1,6 @@
-# EasyGen SaaS Backend Documentation
+# Repost Ai SaaS Backend Documentation
 
-Complete backend implementation for the EasyGen LinkedIn content generation platform.
+Complete backend implementation for the Repost Ai LinkedIn content generation platform.
 
 ## 🏗️ Architecture Overview
 
@@ -120,7 +120,7 @@ npx prisma generate
 
 In Supabase dashboard:
 - Go to Storage
-- Create a new bucket named `easygen-uploads`
+- Create a new bucket named `repost-ai-uploads`
 - Set it to public or private based on your needs
 
 5. **Set up Stripe products**:

@@ -1,6 +1,6 @@
 # Backend Quick Start Guide
 
-Get your EasyGen backend up and running in 10 minutes.
+Get your Repost Ai backend up and running in 10 minutes.
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 
 In Supabase Dashboard:
 1. Go to Storage
-2. Create bucket: `easygen-uploads`
+2. Create bucket: `repost-ai-uploads`
 3. Set permissions as needed
 
 ### 5. Seed Database (Optional)
@@ -76,7 +76,7 @@ npm run db:seed
 ```
 
 This creates a demo user:
-- Email: `demo@easygen.com`
+- Email: `demo@repostai.io`
 - Password: `password123`
 
 ### 6. Start Development Server

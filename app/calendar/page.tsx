@@ -242,14 +242,14 @@ export default function CalendarPage() {
 
     // Add day names
     const dayHeaders = dayNames.map(day => (
-      <div key={day} className="text-center font-semibold text-gray-700 py-2">
+      <div key={day} className="text-center font-semibold text-gray-700 dark:text-gray-300 py-2">
         {day}
       </div>
     ));
 
     // Add empty cells for days before month starts
     for (let i = 0; i < startingDayOfWeek; i++) {
-      days.push(<div key={`empty-${i}`} className="bg-gray-50 border border-gray-200"></div>);
+      days.push(<div key={`empty-${i}`} className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"></div>);
     }
 
     // Add days of month
@@ -264,15 +264,15 @@ export default function CalendarPage() {
       days.push(
         <div
           key={day}
-          className={`min-h-[120px] border border-gray-200 p-2 cursor-pointer hover:bg-gray-50 transition-colors ${
-            isToday ? 'bg-blue-50 border-blue-300' : 'bg-white'
+          className={`min-h-[120px] border border-gray-200 dark:border-gray-700 p-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+            isToday ? 'bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600' : 'bg-white dark:bg-gray-800'
           }`}
           onClick={() => {
             setSelectedDate(date);
             setShowAddModal(true);
           }}
         >
-          <div className={`text-sm font-semibold mb-1 ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>
+          <div className={`text-sm font-semibold mb-1 ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}>
             {day}
           </div>
           <div className="space-y-1">
@@ -292,7 +292,7 @@ export default function CalendarPage() {
               </div>
             ))}
             {postsForDay.length > 3 && (
-              <div className="text-xs text-gray-600 font-medium">
+              <div className="text-xs text-gray-600 dark:text-gray-400 font-medium">
                 +{postsForDay.length - 3} more
               </div>
             )}
@@ -302,7 +302,7 @@ export default function CalendarPage() {
     }
 
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
         <div className="grid grid-cols-7 gap-0">
           {dayHeaders}
           {days}
@@ -323,7 +323,7 @@ export default function CalendarPage() {
     }
 
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
         <div className="grid grid-cols-7 gap-4">
           {weekDays.map(date => {
             const postsForDay = getPostsForDate(date);
@@ -334,11 +334,11 @@ export default function CalendarPage() {
 
             return (
               <div key={date.toISOString()} className="space-y-2">
-                <div className={`text-center p-3 rounded-xl ${isToday ? 'bg-blue-100' : 'bg-gray-100'}`}>
-                  <div className="text-xs text-gray-600">
+                <div className={`text-center p-3 rounded-xl ${isToday ? 'bg-blue-100 dark:bg-blue-900/30' : 'bg-gray-100 dark:bg-gray-700'}`}>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">
                     {date.toLocaleDateString('en-US', { weekday: 'short' })}
                   </div>
-                  <div className={`text-2xl font-bold ${isToday ? 'text-blue-600' : 'text-gray-900'}`}>
+                  <div className={`text-2xl font-bold ${isToday ? 'text-blue-600 dark:text-blue-400' : 'text-gray-900 dark:text-white'}`}>
                     {date.getDate()}
                   </div>
                 </div>
@@ -363,7 +363,7 @@ export default function CalendarPage() {
                       setSelectedDate(date);
                       setShowAddModal(true);
                     }}
-                    className="w-full py-2 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-primary hover:text-primary transition-colors text-sm"
+                    className="w-full py-2 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-gray-500 dark:text-gray-400 hover:border-primary hover:text-primary transition-colors text-sm"
                   >
                     + Add Post
                   </button>
@@ -382,9 +382,9 @@ export default function CalendarPage() {
     );
 
     return (
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6">
         <div className="mb-6">
-          <h3 className="text-2xl font-bold text-gray-900">
+          <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
             {currentDate.toLocaleDateString('en-US', {
               weekday: 'long',
               year: 'numeric',
@@ -392,14 +392,14 @@ export default function CalendarPage() {
               day: 'numeric'
             })}
           </h3>
-          <p className="text-gray-600 mt-1">{postsForDay.length} scheduled posts</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">{postsForDay.length} scheduled posts</p>
         </div>
 
         <div className="space-y-4">
           {postsForDay.length === 0 ? (
             <div className="text-center py-12">
-              <CalendarIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-gray-600 text-lg">No posts scheduled for this day</p>
+              <CalendarIcon className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+              <p className="text-gray-600 dark:text-gray-400 text-lg">No posts scheduled for this day</p>
               <button
                 onClick={() => {
                   setSelectedDate(currentDate);
@@ -414,13 +414,13 @@ export default function CalendarPage() {
             postsForDay.map(post => (
               <div
                 key={post.id}
-                className="border-l-4 border-primary bg-gradient-to-r from-light-green to-pastel-green rounded-xl p-4 cursor-pointer hover:shadow-md transition-all"
+                className="border-l-4 border-primary bg-gradient-to-r from-light-green to-pastel-green dark:from-gray-700 dark:to-gray-700 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all"
                 onClick={() => handleViewPost(post)}
               >
                 <div className="flex items-start justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-primary" />
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-900 dark:text-white">
                       {new Date(post.scheduledFor).toLocaleTimeString('en-US', {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -437,7 +437,7 @@ export default function CalendarPage() {
                     <X className="w-5 h-5" />
                   </button>
                 </div>
-                <p className="text-gray-700 whitespace-pre-wrap line-clamp-3">{post.content}</p>
+                <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap line-clamp-3">{post.content}</p>
               </div>
             ))
           )}
@@ -447,14 +447,14 @@ export default function CalendarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-gray-900 mb-2">Content Calendar</h1>
-              <p className="text-lg text-gray-600">
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Content Calendar</h1>
+              <p className="text-lg text-gray-600 dark:text-gray-400">
                 Schedule and manage your LinkedIn content publishing timeline
               </p>
             </div>
@@ -472,7 +472,7 @@ export default function CalendarPage() {
         </div>
 
         {/* Controls */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-6">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
             {/* View Selector */}
             <div className="flex items-center gap-2">
@@ -481,7 +481,7 @@ export default function CalendarPage() {
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   view === 'month'
                     ? 'bg-gradient-to-r from-primary to-accent text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 Month
@@ -491,7 +491,7 @@ export default function CalendarPage() {
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   view === 'week'
                     ? 'bg-gradient-to-r from-primary to-accent text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 Week
@@ -501,7 +501,7 @@ export default function CalendarPage() {
                 className={`px-4 py-2 rounded-lg font-medium transition-all ${
                   view === 'day'
                     ? 'bg-gradient-to-r from-primary to-accent text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                 }`}
               >
                 Day
@@ -512,7 +512,7 @@ export default function CalendarPage() {
             <div className="flex items-center gap-4">
               <button
                 onClick={() => setCurrentDate(new Date())}
-                className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg font-medium hover:bg-gray-200 transition-all"
+                className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
               >
                 Today
               </button>
@@ -523,11 +523,11 @@ export default function CalendarPage() {
                     else if (view === 'week') navigateWeek('prev');
                     else navigateDay('prev');
                   }}
-                  className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all"
+                  className="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                 >
-                  <ChevronLeft className="w-5 h-5 text-gray-700" />
+                  <ChevronLeft className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 </button>
-                <div className="text-lg font-semibold text-gray-900 min-w-[200px] text-center">
+                <div className="text-lg font-semibold text-gray-900 dark:text-white min-w-[200px] text-center">
                   {view === 'month' && currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                   {view === 'week' && `Week of ${currentDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`}
                   {view === 'day' && currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -538,9 +538,9 @@ export default function CalendarPage() {
                     else if (view === 'week') navigateWeek('next');
                     else navigateDay('next');
                   }}
-                  className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all"
+                  className="p-2 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                 >
-                  <ChevronRight className="w-5 h-5 text-gray-700" />
+                  <ChevronRight className="w-5 h-5 text-gray-700 dark:text-gray-300" />
                 </button>
               </div>
             </div>
@@ -564,16 +564,16 @@ export default function CalendarPage() {
       {/* Add/Schedule Post Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full p-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Schedule Post</h2>
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Schedule Post</h2>
               <button
                 onClick={() => {
                   setShowAddModal(false);
                   setNewPostContent("");
                   setSelectedDate(null);
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -582,33 +582,33 @@ export default function CalendarPage() {
             <div className="space-y-4">
               {/* Date Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Schedule Date
                 </label>
                 <input
                   type="date"
                   value={selectedDate ? selectedDate.toISOString().split('T')[0] : ''}
                   onChange={(e) => setSelectedDate(new Date(e.target.value))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
               {/* Time Selection */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Schedule Time
                 </label>
                 <input
                   type="time"
                   value={selectedTime}
                   onChange={(e) => setSelectedTime(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
               </div>
 
               {/* Content */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Post Content
                 </label>
                 <textarea
@@ -616,7 +616,7 @@ export default function CalendarPage() {
                   onChange={(e) => setNewPostContent(e.target.value)}
                   placeholder="Write your LinkedIn post content here..."
                   rows={8}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
+                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
                 />
               </div>
 
@@ -628,7 +628,7 @@ export default function CalendarPage() {
                     setNewPostContent("");
                     setSelectedDate(null);
                   }}
-                  className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all"
+                  className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                 >
                   Cancel
                 </button>
@@ -648,9 +648,9 @@ export default function CalendarPage() {
       {/* View/Edit Post Modal */}
       {showViewModal && selectedPost && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-3xl w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {isEditingPost ? "Edit Scheduled Post" : "Scheduled Post"}
               </h2>
               <button
@@ -659,7 +659,7 @@ export default function CalendarPage() {
                   setSelectedPost(null);
                   setIsEditingPost(false);
                 }}
-                className="text-gray-400 hover:text-gray-600 transition-colors"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -671,7 +671,7 @@ export default function CalendarPage() {
                 <span className="px-3 py-1 bg-gradient-to-r from-primary to-accent text-white rounded-full text-sm font-medium">
                   {selectedPost.status}
                 </span>
-                <span className="text-sm text-gray-600">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
                   Created {new Date(selectedPost.createdAt).toLocaleDateString('en-US', {
                     month: 'short',
                     day: 'numeric',
@@ -683,7 +683,7 @@ export default function CalendarPage() {
               {/* Date and Time */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Schedule Date
                   </label>
                   {isEditingPost ? (
@@ -691,10 +691,10 @@ export default function CalendarPage() {
                       type="date"
                       value={editedDate}
                       onChange={(e) => setEditedDate(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   ) : (
-                    <div className="px-4 py-2 bg-gray-50 rounded-xl text-gray-900">
+                    <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-xl text-gray-900 dark:text-white">
                       {new Date(selectedPost.scheduledFor).toLocaleDateString('en-US', {
                         weekday: 'long',
                         month: 'long',
@@ -706,7 +706,7 @@ export default function CalendarPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Schedule Time
                   </label>
                   {isEditingPost ? (
@@ -714,10 +714,10 @@ export default function CalendarPage() {
                       type="time"
                       value={editedTime}
                       onChange={(e) => setEditedTime(e.target.value)}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                     />
                   ) : (
-                    <div className="px-4 py-2 bg-gray-50 rounded-xl text-gray-900 flex items-center gap-2">
+                    <div className="px-4 py-2 bg-gray-50 dark:bg-gray-700 rounded-xl text-gray-900 dark:text-white flex items-center gap-2">
                       <Clock className="w-4 h-4 text-primary" />
                       {new Date(selectedPost.scheduledFor).toLocaleTimeString('en-US', {
                         hour: '2-digit',
@@ -730,7 +730,7 @@ export default function CalendarPage() {
 
               {/* Content */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Post Content
                 </label>
                 {isEditingPost ? (
@@ -739,27 +739,27 @@ export default function CalendarPage() {
                     onChange={(e) => setEditedContent(e.target.value)}
                     placeholder="Write your LinkedIn post content here..."
                     rows={12}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
                   />
                 ) : (
-                  <div className="bg-gray-50 rounded-xl p-4 max-h-[400px] overflow-y-auto">
-                    <p className="text-gray-700 whitespace-pre-wrap">{selectedPost.content}</p>
+                  <div className="bg-gray-50 dark:bg-gray-700 rounded-xl p-4 max-h-[400px] overflow-y-auto">
+                    <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{selectedPost.content}</p>
                   </div>
                 )}
               </div>
 
               {/* Character Count */}
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 {isEditingPost ? editedContent.length : selectedPost.content.length} characters
               </div>
 
               {/* Actions */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
+              <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                 {isEditingPost ? (
                   <>
                     <button
                       onClick={handleCancelEdit}
-                      className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all"
+                      className="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
                     >
                       Cancel
                     </button>
@@ -775,7 +775,7 @@ export default function CalendarPage() {
                   <>
                     <button
                       onClick={() => handleCopyPost(selectedPost.content)}
-                      className="px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                      className="px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:bg-gray-200 dark:hover:bg-gray-600 transition-all flex items-center justify-center gap-2"
                     >
                       <Copy className="w-5 h-5" />
                       Copy

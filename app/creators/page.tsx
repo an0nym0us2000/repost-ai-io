@@ -114,20 +114,20 @@ export default function CreatorsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             Discover Creators
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Follow your favorite creators to see their trending posts
           </p>
         </div>
 
         {/* Search */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-8">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
@@ -135,7 +135,7 @@ export default function CreatorsPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search creators by name, username, or headline..."
-              className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
         </div>
@@ -145,15 +145,15 @@ export default function CreatorsPage() {
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Your Favorite Creators</h2>
-                <p className="text-sm text-gray-600 mt-1">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Your Favorite Creators</h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   Checkout their recent activity and engage in their post to support them. Want to modify who shows up in this list?{" "}
                   <button className="text-primary hover:underline font-medium">
                     View Profiles
                   </button>
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-gray-600">
+              <div className="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                 <div className="w-5 h-5 rounded-full border-2 border-primary flex items-center justify-center">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
                 </div>
@@ -165,14 +165,14 @@ export default function CreatorsPage() {
               {favoriteCreators.map((creator) => (
                 <div
                   key={creator.id}
-                  className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all"
+                  className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all"
                 >
                   {/* Avatar */}
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xl font-bold">
                       {getInitials(creator.name)}
                     </div>
-                    <button className="text-gray-400 hover:text-gray-600">
+                    <button className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M12 13C12.5523 13 13 12.5523 13 12C13 11.4477 12.5523 11 12 11C11.4477 11 11 11.4477 11 12C11 12.5523 11.4477 13 12 13Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                         <path d="M12 6C12.5523 6 13 5.55228 13 5C13 4.44772 12.5523 4 12 4C11.4477 4 11 4.44772 11 5C11 5.55228 11.4477 6 12 6Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -182,15 +182,15 @@ export default function CreatorsPage() {
                   </div>
 
                   {/* Creator Info */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     {creator.name}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[40px]">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 min-h-[40px]">
                     {creator.headline || "LinkedIn Creator"}
                   </p>
 
                   {/* Stats */}
-                  <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+                  <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 mb-4">
                     {creator.username && (
                       <div className="flex items-center gap-1">
                         <MapPin className="w-4 h-4" />
@@ -215,8 +215,8 @@ export default function CreatorsPage() {
         {/* Discover Creators */}
         <div>
           <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900">Discover More Creators</h2>
-            <p className="text-sm text-gray-600 mt-1">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Discover More Creators</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
               Browse and follow creators to personalize your trending posts feed
             </p>
           </div>
@@ -227,14 +227,14 @@ export default function CreatorsPage() {
             </div>
           ) : discoverCreators.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-gray-600 text-lg">No creators found matching your search</p>
+              <p className="text-gray-600 dark:text-gray-400 text-lg">No creators found matching your search</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {discoverCreators.map((creator) => (
                 <div
                   key={creator.id}
-                  className="bg-white rounded-2xl border border-gray-200 p-6 hover:shadow-lg transition-all"
+                  className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-lg transition-all"
                 >
                   {/* Avatar */}
                   <div className="flex items-start justify-between mb-4">
@@ -244,15 +244,15 @@ export default function CreatorsPage() {
                   </div>
 
                   {/* Creator Info */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1">
                     {creator.name}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-3 line-clamp-2 min-h-[40px]">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2 min-h-[40px]">
                     {creator.headline || "LinkedIn Creator"}
                   </p>
 
                   {/* Stats */}
-                  <div className="text-sm text-gray-600 mb-4">
+                  <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                     <div className="flex items-center gap-1 mb-1">
                       <Briefcase className="w-4 h-4" />
                       <span>{creator.postCount} trending posts</span>
@@ -262,7 +262,7 @@ export default function CreatorsPage() {
                   {/* Action Button */}
                   <button
                     onClick={() => handleToggleFollow(creator.id, creator.isFollowing)}
-                    className="w-full px-4 py-2.5 bg-white border-2 border-gray-300 text-gray-700 rounded-xl font-medium hover:border-primary hover:text-primary transition-all"
+                    className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-xl font-medium hover:border-primary hover:text-primary transition-all"
                   >
                     + Add to Favorites
                   </button>

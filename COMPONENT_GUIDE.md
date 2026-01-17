@@ -1,6 +1,6 @@
 # Component Guide
 
-Complete reference for all components and their usage in the EasyGen platform.
+Complete reference for all components and their usage in the Repost Ai platform.
 
 ## 📐 Layout Components
 
@@ -411,4 +411,4 @@ Update this guide with component documentation.
 
 ---
 
-This guide will help you understand, modify, and extend the EasyGen platform components. Keep it updated as you add new components!
+This guide will help you understand, modify, and extend the Repost Ai platform components. Keep it updated as you add new components!

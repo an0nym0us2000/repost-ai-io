@@ -141,20 +141,20 @@ export default function TrendingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
             Trending LinkedIn Posts
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Discover viral content from top creators and analyze what's working on LinkedIn
           </p>
         </div>
 
         {/* Filters Bar */}
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-6 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-8">
           {/* Search */}
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -163,12 +163,12 @@ export default function TrendingPage() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search posts by content or creator..."
-              className="w-full pl-12 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
             />
           </div>
 
           {/* Followed Creators Toggle */}
-          <div className="mb-4 flex items-center justify-between p-4 bg-gradient-to-r from-light-green to-pastel-green rounded-xl border border-primary">
+          <div className="mb-4 flex items-center justify-between p-4 bg-gradient-to-r from-light-green to-pastel-green dark:from-gray-700 dark:to-gray-700 rounded-xl border border-primary dark:border-primary/50">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
@@ -179,8 +179,8 @@ export default function TrendingPage() {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-gray-900">Show Only Favorite Creators</h3>
-                <p className="text-sm text-gray-600">Filter posts from creators you follow</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">Show Only Favorite Creators</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Filter posts from creators you follow</p>
               </div>
             </div>
             <button
@@ -201,13 +201,13 @@ export default function TrendingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {/* Sort By */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Sort By
               </label>
               <select
                 value={filters.sortBy}
                 onChange={(e) => setFilters({ ...filters, sortBy: e.target.value as any })}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
               >
                 <option value="outlier">Virality Score</option>
                 <option value="engagement">Total Engagement</option>
@@ -217,13 +217,13 @@ export default function TrendingPage() {
 
             {/* Media Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Media Type
               </label>
               <select
                 value={filters.mediaType}
                 onChange={(e) => setFilters({ ...filters, mediaType: e.target.value })}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
               >
                 <option value="all">All Types</option>
                 <option value="IMAGE">Image</option>
@@ -235,13 +235,13 @@ export default function TrendingPage() {
 
             {/* Day of Week */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Day Posted
               </label>
               <select
                 value={filters.dayOfWeek}
                 onChange={(e) => setFilters({ ...filters, dayOfWeek: e.target.value })}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
               >
                 <option value="all">All Days</option>
                 <option value="Monday">Monday</option>
@@ -256,13 +256,13 @@ export default function TrendingPage() {
 
             {/* Post Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Post Type
               </label>
               <select
                 value={filters.postType}
                 onChange={(e) => setFilters({ ...filters, postType: e.target.value })}
-                className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-gray-900 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
+                className="w-full px-4 py-2.5 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer"
               >
                 <option value="all">All Types</option>
                 <option value="regular">Original Posts</option>
@@ -279,7 +279,7 @@ export default function TrendingPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 filters.hasQuestion === true
                   ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600"
               }`}
             >
               Has Question
@@ -289,7 +289,7 @@ export default function TrendingPage() {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 filters.hasCTA === true
                   ? "bg-primary text-white shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-gray-300"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 border border-gray-300 dark:border-gray-600"
               }`}
             >
               Has Call-to-Action
@@ -308,7 +308,7 @@ export default function TrendingPage() {
                   sortBy: 'outlier',
                   followedOnly: false,
                 })}
-                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 transition-all"
+                className="px-4 py-2 rounded-lg text-sm font-medium bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/50 border border-red-200 dark:border-red-800 transition-all"
               >
                 Clear Filters
               </button>
@@ -316,28 +316,28 @@ export default function TrendingPage() {
           </div>
 
           {/* Stats */}
-          <div className="mt-6 pt-6 border-t border-gray-200 grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">{stats.totalPosts.toLocaleString()}</div>
-              <div className="text-sm text-gray-600">Total Posts</div>
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">{stats.totalPosts.toLocaleString()}</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">Total Posts</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {stats.withQuestions.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600">With Questions</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">With Questions</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {stats.withCTA.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600">With CTA</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">With CTA</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">
+              <div className="text-2xl font-bold text-gray-900 dark:text-white">
                 {stats.highVirality.toLocaleString()}
               </div>
-              <div className="text-sm text-gray-600">High Virality</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400">High Virality</div>
             </div>
           </div>
         </div>
@@ -346,15 +346,15 @@ export default function TrendingPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
-            <p className="text-gray-600 text-lg">Loading trending posts...</p>
+            <p className="text-gray-600 dark:text-gray-400 text-lg">Loading trending posts...</p>
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-20">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
               <TrendingUp className="w-10 h-10 text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">No posts found</h3>
-            <p className="text-gray-600 mb-4">Try adjusting your filters or search query</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">No posts found</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">Try adjusting your filters or search query</p>
             <button
               onClick={() => setFilters({
                 mediaType: "all",

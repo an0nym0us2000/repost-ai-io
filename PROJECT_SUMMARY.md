@@ -1,8 +1,8 @@
-# EasyGen Platform - Project Summary
+# Repost Ai Platform - Project Summary
 
 ## 🎯 Project Overview
 
-**EasyGen** is a modern, production-ready SaaS web application for AI-powered content generation and publishing. Built with Next.js 15, TypeScript, and Tailwind CSS, it provides a polished, modular interface for creating, managing, and scheduling LinkedIn-style content.
+**Repost Ai** is a modern, production-ready SaaS web application for AI-powered content generation and publishing. Built with Next.js 15, TypeScript, and Tailwind CSS, it provides a polished, modular interface for creating, managing, and scheduling LinkedIn-style content.
 
 ## ✨ What's Been Built
 
@@ -109,7 +109,7 @@
 ## 📂 File Structure
 
 ```
-easygen-claude/
+repost-ai-io/
 ├── 📄 README.md                    - Main documentation
 ├── 📄 QUICK_START.md               - Get started guide
 ├── 📄 COMPONENT_GUIDE.md           - Component reference
@@ -344,7 +344,7 @@ primary: "#YOUR_COLOR"
 
 **Status**: ✅ **COMPLETE & PRODUCTION-READY**
 
-The EasyGen platform is a fully functional, modern SaaS application ready for:
+The Repost Ai platform is a fully functional, modern SaaS application ready for:
 - Immediate use with mock data
 - Backend API integration
 - Production deployment
@@ -358,7 +358,7 @@ All core features are implemented, tested, and documented. The codebase is clean
 
 ```bash
 # 1. Navigate to project
-cd easygen-claude
+cd repost-ai-io
 
 # 2. Install dependencies
 npm install

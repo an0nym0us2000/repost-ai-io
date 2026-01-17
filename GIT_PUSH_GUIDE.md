@@ -23,7 +23,7 @@ Git is authenticated as user `that-cod` but the repository belongs to `an0nym0us
 
 #### Step 2: Update Git Remote
 ```bash
-git remote set-url origin https://YOUR_TOKEN_HERE@github.com/an0nym0us2000/easygen-claude.git
+git remote set-url origin https://YOUR_TOKEN_HERE@github.com/an0nym0us2000/repost-ai-io.git
 ```
 
 #### Step 3: Push
@@ -63,7 +63,7 @@ cat ~/.ssh/id_ed25519.pub
 
 #### Step 5: Update Git Remote
 ```bash
-git remote set-url origin git@github.com:an0nym0us2000/easygen-claude.git
+git remote set-url origin git@github.com:an0nym0us2000/repost-ai-io.git
 ```
 
 #### Step 6: Push

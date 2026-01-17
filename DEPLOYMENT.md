@@ -1,6 +1,6 @@
 # Deployment Guide
 
-Complete guide to deploying your EasyGen platform to production.
+Complete guide to deploying your Repost Ai platform to production.
 
 ## 🚀 Quick Deploy to Vercel (Recommended)
 
@@ -98,10 +98,10 @@ services:
 
 ```bash
 # Build image
-docker build -t easygen-platform .
+docker build -t repost-ai-platform .
 
 # Run container
-docker run -p 3000:3000 easygen-platform
+docker run -p 3000:3000 repost-ai-platform
 
 # Or use docker-compose
 docker-compose up -d
@@ -151,7 +151,7 @@ sudo apt-get install -y nodejs
 
 # Clone repository
 git clone your-repo-url
-cd easygen-claude
+cd repost-ai-io
 
 # Install dependencies
 npm install
@@ -163,7 +163,7 @@ npm run build
 sudo npm install -g pm2
 
 # Start with PM2
-pm2 start npm --name "easygen" -- start
+pm2 start npm --name "repost-ai" -- start
 
 # Save PM2 configuration
 pm2 save
@@ -318,13 +318,13 @@ npx prisma generate
 
 ```bash
 # Create database
-pscale database create easygen
+pscale database create repost-ai
 
 # Create branch
-pscale branch create easygen main
+pscale branch create repost-ai main
 
 # Get connection string
-pscale connect easygen main --port 3309
+pscale connect repost-ai main --port 3309
 ```
 
 ### MongoDB Atlas
@@ -614,4 +614,4 @@ For deployment issues:
 
 ---
 
-Your EasyGen platform is now ready for production deployment! 🎉
+Your Repost Ai platform is now ready for production deployment! 🎉

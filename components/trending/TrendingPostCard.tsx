@@ -171,7 +171,7 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
     };
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col h-full">
             {/* Header */}
             <div className="p-4 flex items-start gap-3">
                 <div className="relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-br from-primary/20 to-accent/20 flex-shrink-0">
@@ -192,17 +192,17 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-2">
                         <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-gray-900 truncate">{post.creator.name}</h3>
+                            <h3 className="font-semibold text-gray-900 dark:text-white truncate">{post.creator.name}</h3>
                             {post.creator.headline && (
-                                <p className="text-sm text-gray-600 truncate">{post.creator.headline}</p>
+                                <p className="text-sm text-gray-600 dark:text-gray-400 truncate">{post.creator.headline}</p>
                             )}
-                            <p className="text-xs text-gray-500 mt-1">
+                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
                                 {formatDistanceToNow(new Date(post.publishedDate), { addSuffix: true })}
                             </p>
                         </div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                             {getMediaTypeLabel() && (
-                                <span className="px-2.5 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-md border border-gray-200">
+                                <span className="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-medium rounded-md border border-gray-200 dark:border-gray-600">
                                     {getMediaTypeLabel()}
                                 </span>
                             )}
@@ -216,7 +216,7 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
 
             {/* Content */}
             <div className="px-4 pb-3 flex-1">
-                <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-line">
+                <p className="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-line">
                     {truncateContent(post.content)}
                 </p>
                 {post.content.length > 280 && (
@@ -232,7 +232,7 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
             {/* Media */}
             {post.mediaUrl && post.mediaType !== "NONE" && (
                 <div className="px-4 pb-3">
-                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 border border-gray-200">
+                    <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
                         {post.mediaType === "IMAGE" && (
                             <Image
                                 src={post.mediaUrl}
@@ -271,7 +271,7 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                             </svg>
                                         </div>
-                                        <span className="text-sm text-gray-700 font-medium">Document</span>
+                                        <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">Document</span>
                                     </div>
                                 </div>
                             </>
@@ -281,33 +281,33 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
             )}
 
             {/* Engagement Stats with Emoji Reactions */}
-            <div className="px-4 py-3 border-t border-gray-100">
+            <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-1">
                         <span className="text-base">👍</span>
                         <span className="text-base">❤️</span>
                         <span className="text-base">💡</span>
-                        <span className="text-sm font-medium text-gray-700 ml-1">{formatNumber(post.likes)} Likes</span>
+                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300 ml-1">{formatNumber(post.likes)} Likes</span>
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
                         {formatNumber(post.comments)} Comments · {formatNumber(post.reposts)} Reposts
                     </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-2 border-t border-gray-100 dark:border-gray-700">
                     <div className="flex items-center gap-2">
                         <button
                             onClick={handleViewPost}
                             disabled={!post.postUrl}
-                            className="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary transition-colors flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Eye className="w-4 h-4" />
                             <span className="font-medium">View</span>
                         </button>
                         <button
                             onClick={handleCopyContent}
-                            className="text-sm text-gray-600 hover:text-primary transition-colors flex items-center gap-1.5"
+                            className="text-sm text-gray-600 dark:text-gray-400 hover:text-primary transition-colors flex items-center gap-1.5"
                         >
                             <Copy className="w-4 h-4" />
                             <span className="font-medium">Copy</span>
@@ -315,7 +315,7 @@ export default function TrendingPostCard({ post }: TrendingPostCardProps) {
                         <button
                             onClick={handleSave}
                             className={`text-sm transition-colors flex items-center gap-1.5 ${
-                                isSaved ? 'text-primary' : 'text-gray-600 hover:text-primary'
+                                isSaved ? 'text-primary' : 'text-gray-600 dark:text-gray-400 hover:text-primary'
                             }`}
                         >
                             <Bookmark className={`w-4 h-4 ${isSaved ? 'fill-primary' : ''}`} />

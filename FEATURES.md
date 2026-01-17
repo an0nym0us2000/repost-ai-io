@@ -1,6 +1,6 @@
 # Feature Overview
 
-A visual guide to all features in the EasyGen platform.
+A visual guide to all features in the Repost Ai platform.
 
 ## 🎯 Dashboard / Generate Post (`/`)
 
@@ -394,4 +394,4 @@ Arrow Keys  - Calendar navigation
 
 ---
 
-This feature overview provides a visual representation of all functionality in the EasyGen platform. Each feature is production-ready and fully functional!
+This feature overview provides a visual representation of all functionality in the Repost Ai platform. Each feature is production-ready and fully functional!

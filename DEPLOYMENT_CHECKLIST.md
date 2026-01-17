@@ -7,7 +7,7 @@ Use this checklist to deploy your landing page integration step-by-step.
 ### Landing Page Repository Updates
 
 - [ ] Add `vercel.json` configuration file to `RepostAI_landing` repository
-  - Copy from [LANDING_PAGE_VERCEL_CONFIG.md](file:///Users/maheshyadav/EasyGen_Claude/easygen-claude/LANDING_PAGE_VERCEL_CONFIG.md)
+  - Copy from [LANDING_PAGE_VERCEL_CONFIG.md](file:///Users/maheshyadav/repost-ai-io/repost-ai-io/LANDING_PAGE_VERCEL_CONFIG.md)
   
 - [ ] Update CTA button to redirect to `https://app.repostai.io`
   ```jsx
@@ -224,8 +224,8 @@ Go to your domain registrar (where repostai.io is managed):
 
 ## Support Resources
 
-- **Integration Guide**: [LANDING_PAGE_INTEGRATION.md](file:///Users/maheshyadav/EasyGen_Claude/easygen-claude/LANDING_PAGE_INTEGRATION.md)
-- **Vercel Config**: [LANDING_PAGE_VERCEL_CONFIG.md](file:///Users/maheshyadav/EasyGen_Claude/easygen-claude/LANDING_PAGE_VERCEL_CONFIG.md)
+- **Integration Guide**: [LANDING_PAGE_INTEGRATION.md](file:///Users/maheshyadav/repost-ai-io/repost-ai-io/LANDING_PAGE_INTEGRATION.md)
+- **Vercel Config**: [LANDING_PAGE_VERCEL_CONFIG.md](file:///Users/maheshyadav/repost-ai-io/repost-ai-io/LANDING_PAGE_VERCEL_CONFIG.md)
 - **Vercel Docs**: https://vercel.com/docs
 - **Next.js Deployment**: https://nextjs.org/docs/deployment
 
