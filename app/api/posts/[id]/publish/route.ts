@@ -42,7 +42,7 @@ export async function POST(
     }
 
     // Get LinkedIn token and user URN
-    const linkedInToken = await getLinkedInToken();
+    const linkedInToken = await getLinkedInToken(user.id);
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
       select: { linkedInUrn: true },

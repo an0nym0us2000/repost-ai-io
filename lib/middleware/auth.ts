@@ -58,16 +58,24 @@ export async function requirePlan(minPlan: Plan, req?: NextRequest) {
 }
 
 /**
- * Get LinkedIn access token for user
+ * Get LinkedIn access token for user from database
  */
-export async function getLinkedInToken(): Promise<string> {
-  const session = await getServerSession(authOptions);
+export async function getLinkedInToken(userId: string): Promise<string> {
+  const account = await prisma.account.findFirst({
+    where: {
+      userId,
+      provider: 'linkedin',
+    },
+    select: {
+      access_token: true,
+    },
+  });
 
-  if (!session?.linkedInAccessToken) {
-    throw new AuthenticationError('LinkedIn connection required');
+  if (!account?.access_token) {
+    throw new AuthenticationError('LinkedIn connection required. Please connect your LinkedIn account.');
   }
 
-  return session.linkedInAccessToken;
+  return account.access_token;
 }
 
 /**
