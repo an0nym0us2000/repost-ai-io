@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import OpenAI from "openai";
 import logger from "@/lib/logger";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,28 +20,81 @@ export async function POST(req: NextRequest) {
 
     const { count = 6, industry, interests } = await req.json();
 
+    // Get trending posts from the last 7 days
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const recentTrendingPosts = await prisma.trendingPost.findMany({
+      where: {
+        publishedDate: {
+          gte: oneWeekAgo,
+        },
+      },
+      orderBy: {
+        outlierIndex: 'desc', // Most viral posts first
+      },
+      take: 50, // Analyze top 50 posts
+      select: {
+        content: true,
+        likes: true,
+        comments: true,
+        keywords: true,
+        hasQuestion: true,
+        hasCallToAction: true,
+      },
+    });
+
+    // Extract keywords and themes from trending posts
+    const allKeywords = recentTrendingPosts.flatMap(post => post.keywords || []);
+    const keywordFrequency = allKeywords.reduce((acc, keyword) => {
+      acc[keyword] = (acc[keyword] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const topKeywords = Object.entries(keywordFrequency)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, 15)
+      .map(([keyword]) => keyword);
+
+    // Summarize content snippets from top posts
+    const contentSnippets = recentTrendingPosts
+      .slice(0, 10)
+      .map(post => post.content.substring(0, 200))
+      .join('\n---\n');
+
     // Initialize OpenAI client
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
     });
 
-    // Create prompt for topic generation
-    const prompt = `Generate ${count} engaging LinkedIn post topics that are:
-- Trending and relevant in 2024-2025
+    // Create prompt based on actual trending data
+    const prompt = `Analyze these ACTUAL trending LinkedIn posts from the LAST WEEK and generate ${count} topic suggestions based on what's currently performing well:
+
+TOP TRENDING KEYWORDS THIS WEEK:
+${topKeywords.join(', ')}
+
+SAMPLE CONTENT FROM TOP POSTS:
+${contentSnippets}
+
+Generate ${count} engaging LinkedIn post topics that are:
+- Based on themes and patterns from these REAL trending posts
+- Relevant to what's working RIGHT NOW (this week)
 - Professional and insightful
-- Likely to spark engagement and discussion
-- Diverse across different themes (leadership, technology, productivity, career growth, etc.)
+- Likely to spark engagement based on current trends
+- Diverse across different themes
 ${industry ? `- Related to ${industry} industry` : ''}
 ${interests ? `- Aligned with these interests: ${interests}` : ''}
 
-Return ONLY a JSON array of topic strings, nothing else. Each topic should be 8-15 words long.
+Return ONLY a JSON array of topic strings, nothing else. Each topic should be 8-15 words long and reflect current weekly trends.
 Example format: ["Topic 1 here", "Topic 2 here", ...]`;
 
-    logger.info("Generating suggested topics", {
+    logger.info("Generating suggested topics from recent trends", {
       userId: session.user.id,
       count,
       industry,
       interests,
+      recentPostsAnalyzed: recentTrendingPosts.length,
+      topKeywords: topKeywords.slice(0, 5),
     });
 
     const response = await openai.chat.completions.create({
