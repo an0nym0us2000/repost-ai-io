@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Copy, Twitter, Linkedin, Instagram } from "lucide-react";
+import { Twitter, Linkedin, Instagram } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 export function Footer() {
     return (
@@ -8,10 +9,7 @@ export function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                     <div className="col-span-1 md:col-span-1">
                         <Link href="/" className="flex items-center gap-2 mb-6">
-                            <div className="size-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30">
-                                <Copy className="size-5 text-primary" />
-                            </div>
-                            <span className="font-bold text-xl">RepostAI</span>
+                            <Logo size={32} />
                         </Link>
                         <p className="text-gray-400 text-sm mb-6">
                             Helping creators build their personal brand on LinkedIn with AI-powered content tools.

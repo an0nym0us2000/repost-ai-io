@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Sparkles,
   FileText,
   TrendingUp,
   Users,
@@ -11,7 +10,9 @@ import {
   Bookmark,
   Calendar,
   Settings,
+  Sparkles,
 } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 const menuItems = [
   {
@@ -64,10 +65,7 @@ export default function Sidebar() {
       {/* Logo */}
       <div className="p-6 border-b border-border">
         <Link href="/generate" className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-xl font-bold text-text-primary">Repost Ai</span>
+          <Logo size={32} />
         </Link>
       </div>
 

@@ -4,6 +4,8 @@
 
 export const APP_NAME = 'Repost Ai';
 export const APP_DESCRIPTION = 'AI-Powered LinkedIn Content Generation Platform';
+export const LOGO_PATH = '/logo.png';
+export const LOGO_ALT = 'Repost AI Logo';
 
 // Plan Limits
 export const PLAN_LIMITS = {

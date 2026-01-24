@@ -21,6 +21,10 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Repost Ai - AI-Powered LinkedIn Content Generator",
   description: "Generate viral LinkedIn posts with AI. Create, schedule, and manage professional content effortlessly.",
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export default function RootLayout({

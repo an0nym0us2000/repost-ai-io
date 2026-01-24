@@ -1,25 +1,47 @@
 /**
- * Rate Limiting using Upstash Redis
- * Falls back to no-op when Redis is not configured
+ * Rate Limiting
+ * Uses in-memory rate limiting by default
+ * Can optionally use Upstash Redis if configured (for distributed systems)
  */
 
-import { Ratelimit } from '@upstash/ratelimit';
-import { Redis } from '@upstash/redis';
 import { RateLimitError } from './errors';
 
-// Check if Upstash Redis is properly configured
+// Try to import Upstash (optional dependency)
+let Ratelimit: any = null;
+let Redis: any = null;
+
+try {
+  const upstashRatelimit = require('@upstash/ratelimit');
+  const upstashRedis = require('@upstash/redis');
+  Ratelimit = upstashRatelimit.Ratelimit;
+  Redis = upstashRedis.Redis;
+} catch (e) {
+  // Upstash not installed - will use in-memory fallback
+  console.log('[Rate Limit] Using in-memory rate limiting (Upstash not installed)');
+}
+
+// Check if Upstash Redis is configured
 const isRedisConfigured = !!(
   process.env.UPSTASH_REDIS_REST_URL &&
   process.env.UPSTASH_REDIS_REST_TOKEN &&
-  process.env.UPSTASH_REDIS_REST_URL.startsWith('https://')
+  process.env.UPSTASH_REDIS_REST_URL.startsWith('https://') &&
+  Ratelimit &&
+  Redis
 );
 
-// Only create Redis client if properly configured
+// Import in-memory rate limiter
+import {
+  enforceRateLimit as inMemoryEnforceRateLimit,
+  getRateLimitHeaders as inMemoryGetRateLimitHeaders,
+  RATE_LIMIT_CONFIGS,
+} from './ratelimit-inmemory';
+
+// Create Redis client if configured
 const redis = isRedisConfigured
   ? new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-  })
+      url: process.env.UPSTASH_REDIS_REST_URL!,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    })
   : null;
 
 /**
@@ -27,26 +49,23 @@ const redis = isRedisConfigured
  */
 export const defaultRateLimiter = redis
   ? new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(
-      parseInt(process.env.RATE_LIMIT_REQUESTS || '100'),
-      `${parseInt(process.env.RATE_LIMIT_WINDOW || '60000')} ms`
-    ),
-    analytics: true,
-    prefix: '@ratelimit/default',
-  })
+      redis,
+      limiter: Ratelimit.slidingWindow(100, '1 m'),
+      analytics: true,
+      prefix: '@ratelimit/default',
+    })
   : null;
 
 /**
- * Strict rate limiter for AI generation: 20 requests per hour
+ * AI rate limiter: 20 requests per hour
  */
 export const aiRateLimiter = redis
   ? new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(20, '1 h'),
-    analytics: true,
-    prefix: '@ratelimit/ai',
-  })
+      redis,
+      limiter: Ratelimit.slidingWindow(20, '1 h'),
+      analytics: true,
+      prefix: '@ratelimit/ai',
+    })
   : null;
 
 /**
@@ -54,34 +73,37 @@ export const aiRateLimiter = redis
  */
 export const publishRateLimiter = redis
   ? new Ratelimit({
-    redis,
-    limiter: Ratelimit.slidingWindow(10, '24 h'),
-    analytics: true,
-    prefix: '@ratelimit/publish',
-  })
+      redis,
+      limiter: Ratelimit.slidingWindow(10, '24 h'),
+      analytics: true,
+      prefix: '@ratelimit/publish',
+    })
   : null;
 
 /**
  * Helper function to check rate limit
- * No-op if Redis is not configured
+ * Uses Redis if configured, otherwise falls back to in-memory
  */
 export async function checkRateLimit(
   identifier: string,
-  limiter: Ratelimit | null = defaultRateLimiter
+  limiter: any = defaultRateLimiter,
+  configKey: keyof typeof RATE_LIMIT_CONFIGS = 'default'
 ): Promise<void> {
-  // Skip rate limiting if not configured
-  if (!limiter) {
-    console.log('[Rate Limit] Skipping - Redis not configured');
+  // Use Redis if configured
+  if (limiter) {
+    const { success, limit, reset, remaining } = await limiter.limit(identifier);
+
+    if (!success) {
+      throw new RateLimitError(
+        `Rate limit exceeded. Try again in ${Math.ceil((reset - Date.now()) / 1000)} seconds`
+      );
+    }
     return;
   }
 
-  const { success, limit, reset, remaining } = await limiter.limit(identifier);
-
-  if (!success) {
-    throw new RateLimitError(
-      `Rate limit exceeded. Try again in ${Math.ceil((reset - Date.now()) / 1000)} seconds`
-    );
-  }
+  // Fallback to in-memory rate limiting
+  const config = RATE_LIMIT_CONFIGS[configKey];
+  await inMemoryEnforceRateLimit(identifier, config);
 }
 
 /**
@@ -89,19 +111,30 @@ export async function checkRateLimit(
  */
 export async function getRateLimitHeaders(
   identifier: string,
-  limiter: Ratelimit | null = defaultRateLimiter
+  limiter: any = defaultRateLimiter,
+  configKey: keyof typeof RATE_LIMIT_CONFIGS = 'default'
 ): Promise<Record<string, string>> {
-  // Return empty headers if not configured
-  if (!limiter) {
-    return {};
+  // Use Redis if configured
+  if (limiter) {
+    const { limit, reset, remaining } = await limiter.limit(identifier);
+    return {
+      'X-RateLimit-Limit': limit.toString(),
+      'X-RateLimit-Remaining': remaining.toString(),
+      'X-RateLimit-Reset': reset.toString(),
+    };
   }
 
-  const { limit, reset, remaining } = await limiter.limit(identifier);
+  // Fallback to in-memory rate limiting
+  const config = RATE_LIMIT_CONFIGS[configKey];
+  return await inMemoryGetRateLimitHeaders(identifier, config);
+}
 
-  return {
-    'X-RateLimit-Limit': limit.toString(),
-    'X-RateLimit-Remaining': remaining.toString(),
-    'X-RateLimit-Reset': reset.toString(),
-  };
+// Log which rate limiting method is being used
+if (typeof window === 'undefined') {
+  if (isRedisConfigured) {
+    console.log('[Rate Limit] ✅ Using Upstash Redis (distributed)');
+  } else {
+    console.log('[Rate Limit] ✅ Using in-memory rate limiting (single server)');
+  }
 }
 

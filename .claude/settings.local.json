@@ -39,7 +39,9 @@
       "Bash(git commit:*)",
       "Bash(gh --version:*)",
       "Bash(git push:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(dir \"c:\\\\Users\\\\himan\\\\Documents\\\\GitHub\\\\repost-ai-io\\\\public\")",
+      "Bash(dir:*)"
     ],
     "deny": [],
     "ask": []

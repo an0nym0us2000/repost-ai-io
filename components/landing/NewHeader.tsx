@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/components/ui/Logo";
 
 export default function NewHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -37,12 +38,7 @@ export default function NewHeader() {
         <div className="flex justify-between items-center h-16 lg:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">R</span>
-            </div>
-            <span className="text-xl font-bold text-text-primary">
-              Repost Ai
-            </span>
+            <Logo size={32} priority={true} />
           </Link>
 
           {/* Desktop Navigation */}

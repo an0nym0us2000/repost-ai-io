@@ -46,11 +46,75 @@ export async function POST(request: NextRequest) {
     user = await requireAuth();
 
     // Check rate limit
-    await checkRateLimit(`ai:${user.id}`, aiRateLimiter);
+    await checkRateLimit(`ai:${user.id}`, aiRateLimiter, 'ai');
 
     const body = await request.json();
     const data = generateSchema.parse(body);
     topic = data.topic; // Assign topic here for logging in catch block
+
+    // Get user's plan
+    const dbUser = await prisma.user.findUnique({
+      where: { id: user.id },
+      select: { plan: true },
+    });
+
+    if (!dbUser) {
+      throw new Error('User not found');
+    }
+
+    // Check generation limit for FREE plan
+    if (dbUser.plan === 'FREE') {
+      // Get current month's usage
+      const now = new Date();
+      const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      let usage = await prisma.usage.findUnique({
+        where: {
+          userId_month: {
+            userId: user.id,
+            month: currentMonth,
+          },
+        },
+      });
+
+      // Create usage record if it doesn't exist
+      if (!usage) {
+        usage = await prisma.usage.create({
+          data: {
+            id: nanoid(),
+            userId: user.id,
+            month: currentMonth,
+            postsGenerated: 0,
+            postsPublished: 0,
+            aiCallsMade: 0,
+            storageUsedMb: 0,
+          },
+        });
+      }
+
+      // Check if user has exceeded limit
+      const FREE_PLAN_LIMIT = 10;
+      if (usage.postsGenerated >= FREE_PLAN_LIMIT) {
+        logger.warn('Free plan generation limit reached', {
+          userId: user.id,
+          currentGenerations: usage.postsGenerated,
+          limit: FREE_PLAN_LIMIT,
+        });
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: {
+              message: `You've reached your monthly limit of ${FREE_PLAN_LIMIT} generations. Upgrade to PRO for unlimited access.`,
+              code: 'GENERATION_LIMIT_REACHED',
+              limit: FREE_PLAN_LIMIT,
+              used: usage.postsGenerated,
+            },
+          },
+          { status: 403 }
+        );
+      }
+    }
 
     // Fetch user settings to use as defaults
     let userSettings = await prisma.settings.findUnique({
@@ -205,6 +269,38 @@ export async function POST(request: NextRequest) {
     }
 
     logger.info('Post generated successfully', { userId: user.id, topic });
+
+    // Track usage for FREE plan users
+    if (dbUser.plan === 'FREE') {
+      const now = new Date();
+      const currentMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+      await prisma.usage.upsert({
+        where: {
+          userId_month: {
+            userId: user.id,
+            month: currentMonth,
+          },
+        },
+        update: {
+          postsGenerated: {
+            increment: 1,
+          },
+          aiCallsMade: {
+            increment: 1,
+          },
+        },
+        create: {
+          id: nanoid(),
+          userId: user.id,
+          month: currentMonth,
+          postsGenerated: 1,
+          postsPublished: 0,
+          aiCallsMade: 1,
+          storageUsedMb: 0,
+        },
+      });
+    }
 
     // Return generated post with metadata
     return NextResponse.json({

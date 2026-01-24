@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Twitter, Linkedin, Github, Mail, Heart } from "lucide-react";
+import Logo from "@/components/ui/Logo";
 
 const footerLinks = {
   product: [
@@ -288,12 +289,7 @@ export default function NewFooter() {
           {/* Logo & Description */}
           <div className="col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">R</span>
-              </div>
-              <span className="text-xl font-bold text-text-primary">
-                Repost Ai
-              </span>
+              <Logo size={40} />
             </Link>
             <p className="text-text-secondary mb-6 max-w-xs">
               AI-powered LinkedIn content generation. Create viral posts, schedule

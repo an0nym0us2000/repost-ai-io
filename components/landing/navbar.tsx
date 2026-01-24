@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Copy, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Logo from "@/components/ui/Logo";
 
 export function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,10 +15,7 @@ export function Navbar() {
             <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group">
-                    <div className="size-8 rounded-lg bg-primary/20 flex items-center justify-center border border-primary/30 group-hover:border-primary/50 transition-colors">
-                        <Copy className="size-5 text-primary" />
-                    </div>
-                    <span className="font-bold text-xl tracking-tight">RepostAI</span>
+                    <Logo size={32} priority={true} textClassName="tracking-tight" />
                 </Link>
 
                 {/* Desktop Links */}
