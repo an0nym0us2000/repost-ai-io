@@ -12,8 +12,24 @@ export default function LayoutWrapper({
 }) {
     const pathname = usePathname();
 
-    // Don't show sidebar/topbar on landing page and auth pages
-    const isPublicPage = pathname === "/" || pathname.startsWith("/auth");
+    // Don't show sidebar/topbar on landing page, auth pages, and public info pages
+    const publicRoutes = [
+        "/",
+        "/auth",
+        "/pricing",
+        "/features",
+        "/about",
+        "/contact",
+        "/support",
+        "/privacy",
+        "/terms",
+        "/security",
+        "/cookies",
+    ];
+
+    const isPublicPage = publicRoutes.some(route =>
+        pathname === route || pathname.startsWith(route + "/")
+    );
 
     if (isPublicPage) {
         return <>{children}</>;

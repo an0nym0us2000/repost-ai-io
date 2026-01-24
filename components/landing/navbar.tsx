@@ -21,7 +21,7 @@ export function Navbar() {
                 {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8">
                     <Link href="#features" className="text-sm text-gray-400 hover:text-white transition-colors">Features</Link>
-                    <Link href="#pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</Link>
+                    <Link href="/pricing" className="text-sm text-gray-400 hover:text-white transition-colors">Pricing</Link>
                     <Link href="#faq" className="text-sm text-gray-400 hover:text-white transition-colors">FAQ</Link>
                 </div>
 
@@ -54,7 +54,7 @@ export function Navbar() {
                     >
                         <div className="flex flex-col p-4 gap-4">
                             <Link href="#features" className="text-gray-400 hover:text-white" onClick={() => setIsOpen(false)}>Features</Link>
-                            <Link href="#pricing" className="text-gray-400 hover:text-white" onClick={() => setIsOpen(false)}>Pricing</Link>
+                            <Link href="/pricing" className="text-gray-400 hover:text-white" onClick={() => setIsOpen(false)}>Pricing</Link>
                             <Link href="#faq" className="text-gray-400 hover:text-white" onClick={() => setIsOpen(false)}>FAQ</Link>
                             <div className="h-px bg-white/10 my-2" />
                             <Link href="/auth/signin" className="block text-center text-gray-400 hover:text-white">Login</Link>

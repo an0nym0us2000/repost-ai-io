@@ -49,6 +49,12 @@ export default function NewHeader() {
             >
               Features
             </button>
+            <Link
+              href="/pricing"
+              className="text-text-secondary hover:text-primary transition-colors font-medium"
+            >
+              Pricing
+            </Link>
             <button
               onClick={() => scrollToSection("testimonials")}
               className="text-text-secondary hover:text-primary transition-colors font-medium"
@@ -110,6 +116,13 @@ export default function NewHeader() {
               >
                 Features
               </button>
+              <Link
+                href="/pricing"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block w-full text-left text-text-secondary hover:text-primary transition-colors font-medium py-2"
+              >
+                Pricing
+              </Link>
               <button
                 onClick={() => scrollToSection("testimonials")}
                 className="block w-full text-left text-text-secondary hover:text-primary transition-colors font-medium py-2"

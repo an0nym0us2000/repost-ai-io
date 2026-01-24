@@ -14,15 +14,10 @@ const footerLinks = {
   ],
   company: [
     { label: "About", href: "/about" },
-    { label: "Blog", href: "/blog" },
-    { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
   ],
   resources: [
-    { label: "Documentation", href: "/docs" },
-    { label: "API", href: "/api" },
     { label: "Support", href: "/support" },
-    { label: "Status", href: "/status" },
   ],
   legal: [
     { label: "Privacy", href: "/privacy" },
