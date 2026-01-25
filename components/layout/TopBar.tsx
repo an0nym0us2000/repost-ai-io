@@ -2,10 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useSession, signOut } from "next-auth/react";
-import { Bell, Moon, Sun, User, LogOut, X } from "lucide-react";
+import { Bell, Moon, Sun, User, LogOut, X, Menu } from "lucide-react";
 import Link from "next/link";
 
-export default function TopBar() {
+interface TopBarProps {
+  onMenuClick?: () => void;
+}
+
+export default function TopBar({ onMenuClick }: TopBarProps = {}) {
   const { data: session } = useSession();
   const [darkMode, setDarkMode] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -62,10 +66,24 @@ export default function TopBar() {
     .slice(0, 2);
 
   return (
-    <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-border dark:border-gray-700 px-6 py-4 transition-colors">
-      <div className="flex items-center justify-end">
+    <header className="sticky top-0 z-10 bg-white dark:bg-gray-900 border-b border-border dark:border-gray-700 px-4 sm:px-6 py-4 transition-colors">
+      <div className="flex items-center justify-between">
+        {/* Mobile Menu Button */}
+        {onMenuClick && (
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2 hover:bg-card-bg dark:hover:bg-gray-800 rounded-lg transition-colors"
+            aria-label="Open menu"
+          >
+            <Menu className="w-5 h-5 text-text-secondary dark:text-gray-400" />
+          </button>
+        )}
+
+        {/* Spacer for alignment when no menu button */}
+        {!onMenuClick && <div />}
+
         {/* Actions */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           {/* Dark Mode Toggle */}
           <button
             onClick={toggleDarkMode}

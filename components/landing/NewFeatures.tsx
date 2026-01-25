@@ -25,7 +25,7 @@ const features = [
     title: "Generate Viral Posts in Seconds",
     description:
       "Our AI analyzes 10,000+ viral LinkedIn posts to create engaging content tailored to your brand voice. Choose from 8+ tones and customize intensity to match your style perfectly.",
-    image: "https://picsum.photos/800/600?random=1",
+    image: "/home-1.jpg",
     highlights: [
       "8+ voice tones to match your brand",
       "Learning from 10,000+ viral posts",
@@ -40,7 +40,7 @@ const features = [
     title: "Smart Content Calendar",
     description:
       "Plan your entire month in minutes. Our intelligent scheduler suggests optimal posting times based on your audience engagement patterns, ensuring maximum reach.",
-    image: "https://picsum.photos/800/600?random=2",
+    image: "/home-2.jpg",
     highlights: [
       "Visual calendar interface",
       "AI-suggested optimal timing",
@@ -55,7 +55,7 @@ const features = [
     title: "Trending Content Feed",
     description:
       "Stay ahead of the curve with real-time trending topics. Browse viral posts, analyze what works, and repurpose winning content with one click.",
-    image: "https://picsum.photos/800/600?random=3",
+    image: "/home-3.jpg",
     highlights: [
       "Real-time trending analysis",
       "One-click content repurposing",
@@ -70,7 +70,7 @@ const features = [
     title: "Deep Engagement Insights",
     description:
       "Track every metric that matters. Understand what resonates with your audience and optimize your strategy with actionable data-driven insights.",
-    image: "https://picsum.photos/800/600?random=4",
+    image: "/home-4.jpg",
     highlights: [
       "Real-time engagement tracking",
       "Audience growth analytics",
@@ -85,7 +85,7 @@ const features = [
     title: "Audience Targeting & Growth",
     description:
       "Identify and connect with your ideal audience. Our platform helps you understand who engages with your content and how to attract more of them.",
-    image: "https://picsum.photos/800/600?random=5",
+    image: "/home-5.jpg",
     highlights: [
       "Audience demographic insights",
       "Follower growth tracking",
@@ -100,7 +100,7 @@ const features = [
     title: "Document Intelligence",
     description:
       "Turn PDFs, Word docs, and presentations into engaging LinkedIn posts. Our AI extracts key insights and transforms them into shareable content.",
-    image: "https://picsum.photos/800/600?random=6",
+    image: "/home-6.jpg",
     highlights: [
       "PDF & Word doc parsing",
       "Automatic insight extraction",

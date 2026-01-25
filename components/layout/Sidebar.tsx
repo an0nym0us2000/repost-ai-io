@@ -11,6 +11,7 @@ import {
   Calendar,
   Settings,
   Sparkles,
+  X,
 } from "lucide-react";
 import Logo from "@/components/ui/Logo";
 
@@ -57,16 +58,28 @@ const menuItems = [
   },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+export default function Sidebar({ onClose }: SidebarProps = {}) {
   const pathname = usePathname();
 
   return (
     <aside className="w-64 bg-white border-r border-border flex flex-col h-full">
-      {/* Logo */}
-      <div className="p-6 border-b border-border">
+      {/* Logo & Close Button */}
+      <div className="p-6 border-b border-border flex items-center justify-between">
         <Link href="/generate" className="flex items-center space-x-2">
           <Logo size={32} />
         </Link>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+          >
+            <X className="w-5 h-5 text-text-secondary" />
+          </button>
+        )}
       </div>
 
       {/* Navigation */}
@@ -79,6 +92,7 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
                 ? "bg-primary/10 text-primary font-medium"
                 : "text-text-secondary hover:bg-card-bg hover:text-text-primary"

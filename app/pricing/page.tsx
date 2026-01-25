@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Check, X, Zap, Crown, Rocket, Star } from "lucide-react";
 import { useState } from "react";
 import CheckoutButton from "@/components/billing/CheckoutButton";
+import NewHeader from "@/components/landing/NewHeader";
+import NewFooter from "@/components/landing/NewFooter";
 
 const plans = [
   {
@@ -150,9 +152,11 @@ export default function PricingPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-light-green/20 to-white">
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
+    <>
+      <NewHeader />
+      <div className="min-h-screen bg-gradient-to-b from-white via-light-green/20 to-white">
+        {/* Hero Section */}
+        <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -370,6 +374,8 @@ export default function PricingPage() {
           </Link>
         </motion.div>
       </section>
-    </div>
+      </div>
+      <NewFooter />
+    </>
   );
 }
