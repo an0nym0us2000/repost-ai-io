@@ -9,6 +9,7 @@ import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/middleware/auth';
 import { formatErrorResponse, ValidationError } from '@/lib/errors';
 import { cancelSubscription, hasActiveSubscription } from '@/lib/stripe';
+import { cancelPayPalSubscription, hasActivePayPalSubscription } from '@/lib/paypal';
 
 /**
  * GET /api/billing/subscription
@@ -21,9 +22,13 @@ export async function GET(req: NextRequest) {
       where: { id: user.id },
       select: {
         plan: true,
+        paymentProvider: true,
         stripeSubscriptionId: true,
         stripePriceId: true,
         stripeCurrentPeriodEnd: true,
+        paypalSubscriptionId: true,
+        paypalPlanId: true,
+        paypalCurrentPeriodEnd: true,
       },
     });
 
@@ -31,10 +36,26 @@ export async function GET(req: NextRequest) {
       throw new Error('User not found');
     }
 
-    const active = await hasActiveSubscription(user.id);
+    // Check active subscription based on payment provider
+    const active = dbUser.paymentProvider === 'PAYPAL'
+      ? await hasActivePayPalSubscription(user.id)
+      : await hasActiveSubscription(user.id);
+
+    // Return appropriate data based on payment provider
+    if (dbUser.paymentProvider === 'PAYPAL') {
+      return NextResponse.json({
+        plan: dbUser.plan,
+        provider: 'PAYPAL',
+        subscriptionId: dbUser.paypalSubscriptionId,
+        planId: dbUser.paypalPlanId,
+        currentPeriodEnd: dbUser.paypalCurrentPeriodEnd,
+        isActive: active,
+      });
+    }
 
     return NextResponse.json({
       plan: dbUser.plan,
+      provider: 'STRIPE',
       subscriptionId: dbUser.stripeSubscriptionId,
       priceId: dbUser.stripePriceId,
       currentPeriodEnd: dbUser.stripeCurrentPeriodEnd,
@@ -57,10 +78,34 @@ export async function DELETE(req: NextRequest) {
 
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { stripeSubscriptionId: true },
+      select: {
+        paymentProvider: true,
+        stripeSubscriptionId: true,
+        paypalSubscriptionId: true,
+      },
     });
 
-    if (!dbUser?.stripeSubscriptionId) {
+    if (!dbUser) {
+      throw new ValidationError('User not found');
+    }
+
+    // Handle PayPal cancellation
+    if (dbUser.paymentProvider === 'PAYPAL') {
+      if (!dbUser.paypalSubscriptionId) {
+        throw new ValidationError('No active PayPal subscription found');
+      }
+
+      await cancelPayPalSubscription(dbUser.paypalSubscriptionId);
+
+      return NextResponse.json({
+        success: true,
+        provider: 'PAYPAL',
+        message: 'PayPal subscription cancelled successfully',
+      });
+    }
+
+    // Handle Stripe cancellation
+    if (!dbUser.stripeSubscriptionId) {
       throw new ValidationError('No active subscription found');
     }
 
@@ -69,6 +114,7 @@ export async function DELETE(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
+      provider: 'STRIPE',
       cancelAtPeriodEnd: sub.cancel_at_period_end,
       currentPeriodEnd: sub.current_period_end,
     });

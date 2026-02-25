@@ -41,7 +41,10 @@
       "Bash(git push:*)",
       "Bash(npx tsc:*)",
       "Bash(dir \"c:\\\\Users\\\\himan\\\\Documents\\\\GitHub\\\\repost-ai-io\\\\public\")",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(node:*)",
+      "Bash(__NEW_LINE_7049d932b9ba032d__ cat)"
     ],
     "deny": [],
     "ask": []

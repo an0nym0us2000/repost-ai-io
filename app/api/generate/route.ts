@@ -55,11 +55,19 @@ export async function POST(request: NextRequest) {
     // Get user's plan
     const dbUser = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { plan: true },
+      select: { plan: true, bonusCredits: true, isActive: true },
     });
 
     if (!dbUser) {
       throw new Error('User not found');
+    }
+
+    // Check if account is deactivated by admin
+    if (!dbUser.isActive) {
+      return NextResponse.json(
+        { success: false, error: { message: 'Your account has been deactivated. Please contact support.', code: 'ACCOUNT_DEACTIVATED' } },
+        { status: 403 }
+      );
     }
 
     // Check generation limit for FREE plan
@@ -92,22 +100,23 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      // Check if user has exceeded limit
+      // Check if user has exceeded limit (bonus credits extend the limit)
       const FREE_PLAN_LIMIT = 10;
-      if (usage.postsGenerated >= FREE_PLAN_LIMIT) {
+      const effectiveLimit = FREE_PLAN_LIMIT + (dbUser.bonusCredits ?? 0);
+      if (usage.postsGenerated >= effectiveLimit) {
         logger.warn('Free plan generation limit reached', {
           userId: user.id,
           currentGenerations: usage.postsGenerated,
-          limit: FREE_PLAN_LIMIT,
+          limit: effectiveLimit,
         });
 
         return NextResponse.json(
           {
             success: false,
             error: {
-              message: `You've reached your monthly limit of ${FREE_PLAN_LIMIT} generations. Upgrade to PRO for unlimited access.`,
+              message: `You've reached your monthly limit of ${effectiveLimit} generations. Upgrade to PRO for unlimited access.`,
               code: 'GENERATION_LIMIT_REACHED',
-              limit: FREE_PLAN_LIMIT,
+              limit: effectiveLimit,
               used: usage.postsGenerated,
             },
           },

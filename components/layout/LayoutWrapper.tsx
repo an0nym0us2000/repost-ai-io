@@ -27,6 +27,7 @@ export default function LayoutWrapper({
         "/terms",
         "/security",
         "/cookies",
+        "/admin",
     ];
 
     const isPublicPage = publicRoutes.some(route =>

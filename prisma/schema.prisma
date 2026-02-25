@@ -175,23 +175,28 @@ model Settings {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model Subscription {
-  id                   String             @id
-  userId               String
-  createdAt            DateTime           @default(now())
-  updatedAt            DateTime
-  stripeSubscriptionId String             @unique
-  stripePriceId        String
-  stripeCustomerId     String
-  status               SubscriptionStatus
-  currentPeriodStart   DateTime
-  currentPeriodEnd     DateTime
-  cancelAtPeriodEnd    Boolean            @default(false)
-  canceledAt           DateTime?
-  plan                 Plan
-  User                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                    String             @id
+  userId                String
+  createdAt             DateTime           @default(now())
+  updatedAt             DateTime
+  paymentProvider       PaymentProvider    @default(STRIPE)
+  stripeSubscriptionId  String?            @unique
+  stripePriceId         String?
+  stripeCustomerId      String?
+  paypalSubscriptionId  String?            @unique
+  paypalPlanId          String?
+  paypalCustomerId      String?
+  status                SubscriptionStatus
+  currentPeriodStart    DateTime
+  currentPeriodEnd      DateTime
+  cancelAtPeriodEnd     Boolean            @default(false)
+  canceledAt            DateTime?
+  plan                  Plan
+  User                  User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([status])
   @@index([userId])
+  @@index([paymentProvider])
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -212,24 +217,32 @@ model Usage {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model User {
-  id                     String         @id
+  id                     String          @id
   name                   String?
-  email                  String?        @unique
+  email                  String?         @unique
   emailVerified          DateTime?
   image                  String?
   password               String?
-  createdAt              DateTime       @default(now())
+  createdAt              DateTime        @default(now())
   updatedAt              DateTime
-  linkedInId             String?        @unique
+  linkedInId             String?         @unique
   linkedInUsername       String?
   linkedInUrn            String?
-  stripeCustomerId       String?        @unique
-  stripeSubscriptionId   String?        @unique
+  stripeCustomerId       String?         @unique
+  stripeSubscriptionId   String?         @unique
   stripePriceId          String?
   stripeCurrentPeriodEnd DateTime?
-  plan                   Plan           @default(FREE)
-  defaultTone            Tone           @default(PROFESSIONAL)
-  defaultIntensity       Intensity      @default(MEDIUM)
+  paypalCustomerId       String?         @unique
+  paypalSubscriptionId   String?         @unique
+  paypalPlanId           String?
+  paypalCurrentPeriodEnd DateTime?
+  paymentProvider        PaymentProvider @default(STRIPE)
+  plan                   Plan            @default(FREE)
+  bonusCredits           Int             @default(0)
+  isActive               Boolean         @default(true)
+  planExpiresAt          DateTime?
+  defaultTone            Tone            @default(PROFESSIONAL)
+  defaultIntensity       Intensity       @default(MEDIUM)
   linkedInProfileUrl     String?
   Account                Account[]
   Analytics              Analytics[]
@@ -241,10 +254,13 @@ model User {
   Subscription           Subscription[]
   FollowedCreator        FollowedCreator[]
   SavedViralPost         SavedViralPost[]
+  ReferralCode           ReferralCode?
+  CouponUse              CouponUse[]
 
   @@index([email])
   @@index([linkedInId])
   @@index([stripeCustomerId])
+  @@index([paypalCustomerId])
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -346,6 +362,81 @@ enum MediaType {
   VIDEO
   DOCUMENT
   NONE
+}
+
+enum PaymentProvider {
+  STRIPE
+  PAYPAL
+}
+
+enum CouponType {
+  DISCOUNT
+  CREDITS
+}
+
+// ============================================================================
+// ADMIN: COUPON CODES
+// ============================================================================
+
+model CouponCode {
+  id          String     @id
+  code        String     @unique
+  type        CouponType
+  discountPct Int?
+  credits     Int?
+  maxUses     Int?
+  usedCount   Int        @default(0)
+  expiresAt   DateTime?
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  CouponUse   CouponUse[]
+
+  @@index([code])
+  @@index([isActive])
+}
+
+model CouponUse {
+  id       String     @id
+  couponId String
+  userId   String
+  usedAt   DateTime   @default(now())
+  Coupon   CouponCode @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  User     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([couponId, userId])
+  @@index([couponId])
+  @@index([userId])
+}
+
+// ============================================================================
+// ADMIN: REFERRAL CODES
+// ============================================================================
+
+model ReferralCode {
+  id            String     @id
+  userId        String     @unique
+  code          String     @unique
+  discountPct   Int        @default(20)
+  rewardCredits Int        @default(10)
+  usedCount     Int        @default(0)
+  isActive      Boolean    @default(true)
+  createdAt     DateTime   @default(now())
+  User          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Referrals     Referral[]
+
+  @@index([code])
+  @@index([userId])
+}
+
+model Referral {
+  id             String       @id
+  referralCodeId String
+  referredUserId String       @unique
+  createdAt      DateTime     @default(now())
+  ReferralCode   ReferralCode @relation(fields: [referralCodeId], references: [id], onDelete: Cascade)
+
+  @@index([referralCodeId])
+  @@index([referredUserId])
 }
 
 // ============================================================================

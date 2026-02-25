@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Check, X, Zap, Crown, Rocket, Star } from "lucide-react";
 import { useState } from "react";
 import CheckoutButton from "@/components/billing/CheckoutButton";
+import PaymentButton from "@/components/billing/PaymentButton";
 import NewHeader from "@/components/landing/NewHeader";
 import NewFooter from "@/components/landing/NewFooter";
 
@@ -14,6 +15,7 @@ const plans = [
     icon: Star,
     price: "$0",
     priceId: "", // No Stripe price for free plan
+    paypalPlanId: "", // No PayPal plan for free tier
     period: "forever",
     description: "Perfect for getting started with LinkedIn content creation",
     features: [
@@ -39,6 +41,7 @@ const plans = [
     icon: Zap,
     price: "$19",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_STARTER || "price_starter",
+    paypalPlanId: process.env.NEXT_PUBLIC_PAYPAL_PLAN_ID_STARTER_MONTHLY || "paypal_starter_monthly",
     period: "per month",
     description: "For professionals serious about growing their LinkedIn presence",
     features: [
@@ -64,6 +67,7 @@ const plans = [
     icon: Crown,
     price: "$49",
     priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID_PRO || "price_pro",
+    paypalPlanId: process.env.NEXT_PUBLIC_PAYPAL_PLAN_ID_PRO_MONTHLY || "paypal_pro_monthly",
     period: "per month",
     description: "For power users and teams who need unlimited everything",
     features: [
@@ -92,6 +96,7 @@ const plans = [
     icon: Rocket,
     price: "Custom",
     priceId: "", // Contact sales for enterprise
+    paypalPlanId: "", // Contact sales for enterprise
     period: "contact us",
     description: "For large teams and agencies with custom requirements",
     features: [
@@ -228,7 +233,7 @@ export default function PricingPage() {
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-primary to-accent text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
+                    <span className="bg-gradient-to-r from-primary to-accent text-white text-sm font-bold px-6 py-2 rounded-full shadow-lg whitespace-nowrap">
                       MOST POPULAR
                     </span>
                   </div>
@@ -280,13 +285,30 @@ export default function PricingPage() {
                     {plan.cta}
                   </Link>
                 ) : (
-                  <CheckoutButton
-                    priceId={plan.priceId}
-                    planName={plan.name}
-                    className="block w-full text-center py-3 rounded-xl font-semibold transition-all mb-8 bg-gradient-to-r from-primary to-accent text-white"
-                  >
-                    {plan.cta}
-                  </CheckoutButton>
+                  <div className="space-y-3 mb-8">
+                    {/* Stripe Payment Button */}
+                    <PaymentButton
+                      priceId={plan.priceId}
+                      planName={plan.name}
+                      provider="stripe"
+                      className="w-full py-3 rounded-xl font-semibold transition-all bg-gradient-to-r from-primary to-accent text-white"
+                    >
+                      {plan.cta}
+                    </PaymentButton>
+
+                    {/* PayPal Payment Button */}
+                    <PaymentButton
+                      planId={plan.paypalPlanId}
+                      planName={plan.name}
+                      provider="paypal"
+                      className="w-full py-3 rounded-xl font-semibold transition-all bg-[#0070ba] hover:bg-[#005ea6] text-white"
+                    >
+                      <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.067 8.478c.492.88.556 2.014.3 3.327-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.63 3.993-.032.17a.804.804 0 0 1-.794.679H7.72a.483.483 0 0 1-.477-.558L7.418 21l1.122-7.112.045-.289a.805.805 0 0 1 .793-.68h1.659c3.462 0 6.172-1.407 6.967-5.48a4.613 4.613 0 0 0-.937.039zm-3.24-7.478c.548 0 1.054.06 1.517.179a5.4 5.4 0 0 1 2.157 1.09c.417.416.736.912.952 1.463.13.333.215.687.258 1.058.025.227.035.46.035.697 0 .437-.046.885-.138 1.34-.74 3.806-3.276 5.12-6.514 5.12h-.5a.805.805 0 0 0-.794.68l-.04.22-.002.01-.63 3.993-.032.17a.804.804 0 0 1-.794.679H7.72a.483.483 0 0 1-.477-.558L9.187 2.36A.805.805 0 0 1 9.98 1.68h6.847z"/>
+                      </svg>
+                      Pay with PayPal
+                    </PaymentButton>
+                  </div>
                 )}
 
                 <ul className="space-y-4">
