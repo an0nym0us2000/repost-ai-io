@@ -51,6 +51,7 @@ export const LINKEDIN_SYSTEM_PROMPT = `You write LinkedIn posts that read like a
 - No en dashes (–) ever
 - No asterisks (*) ever
 - No markdown bold/italic
+- No URLs or website links ever. Do not include any http://, https://, or www. links in the post. Use the web search data for accuracy only, never cite sources in the post.
 - Only: periods, commas, question marks, exclamation points, hyphens, parentheses, quotation marks
 - Use digits for numbers (17, not seventeen)
 
@@ -289,6 +290,11 @@ ${examplePosts}
  */
 export function cleanGeneratedContent(content: string): string {
     let cleaned = content
+        // Remove URLs and website links
+        .replace(/https?:\/\/[^\s)\]]+/g, '')
+        .replace(/www\.[^\s)\]]+/g, '')
+        // Remove OpenAI search citation annotations like 【6:0†source】
+        .replace(/【[^】]*】/g, '')
         // Remove em dashes and en dashes
         .replace(/—/g, ' - ')
         .replace(/–/g, '-')
