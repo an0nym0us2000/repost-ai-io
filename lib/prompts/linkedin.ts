@@ -45,13 +45,15 @@ export const LINKEDIN_SYSTEM_PROMPT = `You write LinkedIn posts that read like a
 - NEVER use asterisks or markdown formatting. LinkedIn doesn't render them.
 - NEVER use more than 2 emojis in the entire post
 - NEVER start with generic template openings
+- NEVER include any URL, link, domain name, or website reference in the post. No http://, https://, www., no bare domains like "google.com" or "wikipedia.org". ZERO links. The post must contain absolutely no web addresses of any kind. If you retrieved information from the web, use the facts only, never cite or reference the source URL.
+- NEVER add citations, references, or source attributions
 
 ## FORMATTING CONSTRAINTS:
 - No em dashes (—) ever
 - No en dashes (–) ever
 - No asterisks (*) ever
 - No markdown bold/italic
-- No URLs or website links ever. Do not include any http://, https://, or www. links in the post. Use the web search data for accuracy only, never cite sources in the post.
+- ZERO URLs, links, or domain names. Not even as plain text. This is non-negotiable.
 - Only: periods, commas, question marks, exclamation points, hyphens, parentheses, quotation marks
 - Use digits for numbers (17, not seventeen)
 
@@ -286,15 +288,47 @@ ${examplePosts}
 }
 
 /**
+ * Strip every possible URL, citation, and link artifact from content.
+ * Runs multiple passes to guarantee zero URLs survive.
+ */
+function stripAllUrls(text: string): string {
+    let result = text;
+
+    // Pass 1: OpenAI search citation annotations like 【6:0†source】
+    result = result.replace(/【[^】]*】/g, '');
+
+    // Pass 2: Full markdown links — [text](url) and ([text](url))
+    result = result.replace(/\(?\[([^\]]*)\]\([^)]*\)\)?/g, '');
+
+    // Pass 3: Raw URLs with protocol
+    result = result.replace(/https?:\/\/[^\s)\]"',]+/gi, '');
+
+    // Pass 4: www. URLs without protocol
+    result = result.replace(/www\.[^\s)\]"',]+/gi, '');
+
+    // Pass 5: Bare domain names with any common TLD (catches apnews.com, en.wikipedia.org, etc.)
+    // Matches optional subdomains like en.wikipedia.org, docs.google.com
+    const tlds = 'com|org|net|io|co|edu|gov|info|biz|me|ai|dev|app|tech|xyz|uk|us|in|de|fr|ca|au|jp|cn|ru|br|it|es|nl|se|no|fi|pl|cz|tv|cc|ly|to|gg|so|fm|am|im|ws|la|nz|za';
+    const domainRegex = new RegExp(`\\(?(?:[a-zA-Z0-9-]+\\.)*[a-zA-Z0-9-]+\\.(?:${tlds})(?:\\/[^\\s)\\]"',]*)?\\)?`, 'gi');
+    result = result.replace(domainRegex, '');
+
+    // Pass 6: Leftover empty markdown artifacts
+    result = result.replace(/\(\s*\)/g, '');   // empty ()
+    result = result.replace(/\[\s*\]/g, '');   // empty []
+    result = result.replace(/\(\[\s*\]\(\s*\)\)/g, ''); // ([]()), leftover from markdown links
+
+    return result;
+}
+
+/**
  * Clean generated content to enforce formatting rules
  */
 export function cleanGeneratedContent(content: string): string {
-    let cleaned = content
-        // Remove URLs and website links
-        .replace(/https?:\/\/[^\s)\]]+/g, '')
-        .replace(/www\.[^\s)\]]+/g, '')
-        // Remove OpenAI search citation annotations like 【6:0†source】
-        .replace(/【[^】]*】/g, '')
+    // First: strip all URLs and citations (run twice for nested patterns)
+    let cleaned = stripAllUrls(content);
+    cleaned = stripAllUrls(cleaned); // second pass catches anything exposed by first pass
+
+    cleaned = cleaned
         // Remove em dashes and en dashes
         .replace(/—/g, ' - ')
         .replace(/–/g, '-')
@@ -308,13 +342,23 @@ export function cleanGeneratedContent(content: string): string {
         .replace(/\n{3,}/g, '\n\n')
         // Add blank line after sentences starting new sections
         .replace(/([.!?])\n([A-Z0-9])/g, '$1\n\n$2')
-        // Clean up double spaces
+        // Clean up double/triple spaces from removed URLs
         .replace(/  +/g, ' ')
-        // Trim whitespace from each line
+        // Remove orphaned periods from URL removal (". ." or "..")
+        .replace(/\.\s*\./g, '.')
+        // Remove lines that became empty or just punctuation after cleanup
         .split('\n')
         .map(line => line.trim())
+        .filter(line => line !== '' || line === '') // keep blank lines for spacing
         .join('\n')
+        // Final: normalize line breaks again after filtering
+        .replace(/\n{3,}/g, '\n\n')
         .trim();
+
+    // Final safety check: if any URL-like pattern still exists, run one more strip
+    if (/https?:\/\/|www\.|\.com|\.org|\.net|\.io/.test(cleaned)) {
+        cleaned = stripAllUrls(cleaned).replace(/  +/g, ' ').trim();
+    }
 
     return cleaned;
 }
