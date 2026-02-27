@@ -215,10 +215,11 @@ export async function POST(request: NextRequest) {
       examplePosts,
     });
 
-    // Step 5: Call OpenAI to generate the post with enhanced prompts
-    logger.info('Generating post with AI...');
+    // Step 5: Call OpenAI to generate the post with web search for latest data
+    logger.info('Generating post with AI (web search enabled)...');
     const completion = await getOpenAI().chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4o-search-preview',
+      web_search_options: {},
       messages: [
         {
           role: 'system',
@@ -229,10 +230,8 @@ export async function POST(request: NextRequest) {
           content: userPrompt,
         },
       ],
-      temperature: 0.75, // Slightly higher for natural, conversational variation
       max_tokens: 1000,
-      top_p: 0.9, // Slightly lower for more focused output
-    });
+    } as any);
 
     const generatedPost = cleanGeneratedContent(completion.choices[0].message.content?.trim() || '');
 
