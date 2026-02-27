@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -24,11 +24,16 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Repost Ai - AI-Powered LinkedIn Content Generator",
   description: "Generate viral LinkedIn posts with AI. Create, schedule, and manage professional content effortlessly.",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=5",
   icons: {
     icon: '/logo.png',
     apple: '/logo.png',
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({

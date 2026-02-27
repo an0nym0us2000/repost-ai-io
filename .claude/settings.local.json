@@ -44,7 +44,8 @@
       "Bash(dir:*)",
       "Bash(npm uninstall:*)",
       "Bash(node:*)",
-      "Bash(__NEW_LINE_7049d932b9ba032d__ cat)"
+      "Bash(__NEW_LINE_7049d932b9ba032d__ cat)",
+      "Bash(ls -1 *.*)"
     ],
     "deny": [],
     "ask": []

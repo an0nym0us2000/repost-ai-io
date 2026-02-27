@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
 
     const examplePosts = similarPosts
       .slice(0, 3)
-      .map((p, i) => `**Example ${i + 1}** (Engagement Score: ${p.viralScore}):\n${p.text}`)
+      .map((p, i) => `Example ${i + 1} (Engagement Score: ${p.viralScore}):\n${p.text}`)
       .join('\n\n---\n\n');
 
     const { system: systemPrompt, user: userPrompt } = buildLinkedInPrompt({
@@ -229,7 +229,7 @@ export async function POST(request: NextRequest) {
           content: userPrompt,
         },
       ],
-      temperature: 0.6, // Lower temperature for more deterministic output that follows rules
+      temperature: 0.75, // Slightly higher for natural, conversational variation
       max_tokens: 1000,
       top_p: 0.9, // Slightly lower for more focused output
     });

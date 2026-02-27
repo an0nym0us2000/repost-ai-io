@@ -1,49 +1,88 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
 /node_modules
 /.pnp
 .pnp.js
 .yarn/install-state.gz
 
-# testing
-/coverage
-
-# next.js
+# ============================================================================
+# NEXT.JS
+# ============================================================================
 /.next/
 /out/
-
-# production
 /build
+next-env.d.ts
 
-# misc
-.DS_Store
-*.pem
+# ============================================================================
+# ENVIRONMENT & SECRETS
+# ============================================================================
+.env
+.env.local
+.env*.local
+.env.production
+.env.staging
 
-# debug
+# ============================================================================
+# SENSITIVE / TEMP FILES
+# ============================================================================
+# One-off scripts at root level
+check-user.ts
+create-demo-user.ts
+test-password.ts
+
+# Python analysis scripts
+analyze_csv.py
+analyze_csv_to_file.py
+analysis_report.txt
+
+# Large data files
+*.csv
+*.sql
+
+# Backup files
+*.backup
+*.bak
+prisma.config.ts.backup
+
+# ============================================================================
+# LOGS
+# ============================================================================
+/logs
+logs/
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env
-.env*.local
+# ============================================================================
+# TESTING
+# ============================================================================
+/coverage
 
-# vercel
-.vercel
-
-# typescript
+# ============================================================================
+# TYPESCRIPT
+# ============================================================================
 *.tsbuildinfo
-next-env.d.ts
 
+# ============================================================================
+# PRISMA GENERATED
+# ============================================================================
 /app/generated/prisma
 
-# logs
-/logs
-logs/
-*.log
+# ============================================================================
+# OS & EDITOR
+# ============================================================================
+.DS_Store
+*.pem
+.vercel
+.idea/
+.vscode/settings.json
 
-# separate landing page project
+# ============================================================================
+# SEPARATE PROJECTS
+# ============================================================================
 /repost-ai-landing
 
-# Build artifacts and external deployments
+# Files with real credentials / demo data
+docs/DEMO_CREDENTIALS.md
